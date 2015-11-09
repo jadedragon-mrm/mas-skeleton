@@ -21,12 +21,23 @@ package cat.urv.imas.agent;
  * Types of agents.
  */
 public enum AgentType {
-    AMBULANCE,
-    FIREMAN,
-    PRIVATE_VEHICLE,
-    HOSPITAL,
-    FIREMEN_COORDINATOR,
-    HOSPITAL_COORDINATOR,
-    COORDINATOR,
-    CENTRAL
+    RURAL_AGENT("RA"),
+    HELICOPTER("HE"),
+    RURAL_AGENT_COORDINATOR("RC"),
+    HELICOPTER_COORDINATOR("HC"),
+    COORDINATOR("CO"),
+    CENTRAL("CE");
+
+    /**
+     * Value for each kind of agent.
+     */
+    private String value;
+
+    private AgentType(String value) {
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
+    }
 }

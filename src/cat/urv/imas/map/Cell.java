@@ -1,5 +1,5 @@
 /**
- * IMAS base code for the practical work. 
+ * IMAS base code for the practical work.
  * Copyright (C) 2014 DEIM - URV
  *
  * This program is free software: you can redistribute it and/or modify it under
@@ -17,7 +17,12 @@
  */
 package cat.urv.imas.map;
 
+import cat.urv.imas.agent.AgentType;
 import cat.urv.imas.gui.CellVisualizer;
+import cat.urv.imas.onthology.InfoAgent;
+import jade.core.AID;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class keeps all the information about a cell in the map.
@@ -38,6 +43,15 @@ public abstract class Cell implements java.io.Serializable {
      * Column number for this cell, zero based.
      */
     private int col = -1;
+        /**
+     * Information about the agent the cell contains.
+     */
+    private Map<AgentType, Map<AID, InfoAgent>> agents;
+    /**
+     * Number of agents in this cell.
+     */
+    private int numberOfAgents;
+
 
     /**
      * Builds a cell with a given type.
@@ -50,6 +64,11 @@ public abstract class Cell implements java.io.Serializable {
         this.type = type;
         this.row = row;
         this.col = col;
+        numberOfAgents = 0;
+        agents = new HashMap();
+        for (AgentType at : AgentType.values()) {
+            agents.put(at, new HashMap());
+        }
     }
 
     /* ********************************************************************** */
@@ -82,6 +101,48 @@ public abstract class Cell implements java.io.Serializable {
 
     /* ********************************************************************** */
     /**
+     * Checks whether this cell contains at least an agent.
+     *
+     * @return
+     */
+    public boolean isThereAnAgent() {
+        return numberOfAgents > 0;
+    }
+
+        /**
+     * Adds an agent to this cell.
+     *
+     * @param newAgent agent
+     * @throws Exception
+     */
+    public void addAgent(InfoAgent newAgent) throws Exception {
+        System.out.println("Add an agent to " + this + "<--" + newAgent);
+        if (newAgent == null) {
+            throw new Exception("No valid agent to be set (null)");
+        }
+        // if everything is OK, we add the new agent to the cell
+        agents.get(newAgent.getType()).put(newAgent.getAID(), newAgent);
+        numberOfAgents ++;
+    }
+
+    public void removeAgent(InfoAgent oldInfoAgent) throws Exception {
+        System.out.println("Remove an agent to " + this + "<--" + oldInfoAgent);
+        if (!this.isThereAnAgent()) {
+            throw new Exception("There is no agent in cell");
+        }
+        if (oldInfoAgent != null) {
+            throw new Exception("No valid agent to be remove (null).");
+        } else if (!agents.get(oldInfoAgent.getType()).containsKey(oldInfoAgent.getAID())) {
+            throw new Exception("No matching agent to be remove.");
+        }
+        // if everything is OK, we remove the agent from the cell
+        this.agents.get(oldInfoAgent.getType()).remove(oldInfoAgent.getAID());
+        numberOfAgents--;
+    }
+
+
+    /* ********************************************************************** */
+    /**
      * Gets a string representation of the cell.
      *
      * @return
@@ -94,29 +155,58 @@ public abstract class Cell implements java.io.Serializable {
         str += this.toStringSpecialization();
         return str + ")";
     }
-    
+
     /**
      * Allows subclasses to build a specific string.
      * @return string specialization for the cell.
      */
     public String toStringSpecialization() {
-        return "";
+        if (this.isThereAnAgent()) {
+            String newline = System.getProperty("line.separator");
+            StringBuffer sb = new StringBuffer();
+            for (AgentType at : agents.keySet()) {
+                sb.append(newline);
+                sb.append("(" + at.toString() + ":");
+                for (InfoAgent ia : agents.get(at).values()) {
+                    sb.append(newline);
+                    sb.append(ia);
+                }
+                sb.append(")");
+            }
+            return "(agents " + sb.toString() + ")";
+        } else {
+            return "";
+        }
+
     }
-    
+
     /* ************ Map visualization ****************************************/
-    
+
     /**
      * The cell will be asked to be drawn, using the given CellVisualizer API.
      * To do so, it also has to override when necessary the getMessage() method.
      * @param visual provides the API to draw any kind of cell.
      */
     public abstract void draw(CellVisualizer visual);
-    
+
     /**
      * Tells the message to show in the map. Empty string to paint nothing.
      * @return The text to show in the map, located in the current cell.
      */
     public String getMapMessage() {
+        if (this.isThereAnAgent()) {
+            String newline = System.getProperty("line.separator");
+            StringBuffer sb = new StringBuffer();
+            for (AgentType at : agents.keySet()) {
+                if (agents.get(at).size() > 0) {
+                    sb.append(at.getValue());
+                    sb.append(":");
+                    sb.append(agents.get(at).size());
+                    sb.append(newline);
+                }
+            }
+            return sb.toString();
+        }
         return "";
     }
 }

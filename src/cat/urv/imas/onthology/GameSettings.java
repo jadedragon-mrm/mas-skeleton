@@ -1,6 +1,5 @@
 /**
- * IMAS base code for the practical work. 
- * Copyright (C) 2014 DEIM - URV
+ * IMAS base code for the practical work. Copyright (C) 2014 DEIM - URV
  *
  * This program is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -19,6 +18,7 @@ package cat.urv.imas.onthology;
 
 import cat.urv.imas.agent.AgentType;
 import cat.urv.imas.map.Cell;
+import cat.urv.imas.map.InjuredPeople;
 import java.util.List;
 import java.util.Map;
 import javax.xml.bind.annotation.XmlElement;
@@ -28,12 +28,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 /**
  * Current game settings. Cell coordinates are zero based: row and column values
  * goes from [0..n-1], both included.
- * 
+ *
  * Use the GenerateGameSettings to build the game.settings configuration file.
- * 
+ *
  */
 @XmlRootElement(name = "GameSettings")
-public class GameSettings implements java.io.Serializable {    
+public class GameSettings implements java.io.Serializable {
 
     /* Default values set to all attributes, just in case. */
     /**
@@ -41,36 +41,34 @@ public class GameSettings implements java.io.Serializable {
      */
     private float seed = 0.0f;
     /**
-     * List of number of beds per hospital. Therefore, a value "{10, 10, 10}"
-     * means there will be 3 hospitals with 10 beds each. The number of beds
-     * means hospital capacity in number of people in the hospital at the same
-     * simulation step.
+     * Capacity of helicopter, in number of people.
      */
-    private int[] hospitalCapacities = {10, 10, 10};
+    private int peoplePerHelicopter = 2;
     /**
-     * Number of steps a person needs to be in the hospital to health, before
-     * the person leaves the hospital.
+     * Number of people loaded into a helicopter per simulation step.
      */
-    private int stepsToHealth = 3;
+    private int loadingSpeed = 1;
     /**
-     * Capacity of ambulances, in number of people.
+     * Number of steps an avalanche can take long.
      */
-    private int peoplePerAmbulance = 3;
+    private int avalancheDuration = 5;
     /**
-     * Number of people loaded into an ambulance per simulation step.
+     * After this number of steps, injured people will die.
      */
-    private int ambulanceLoadingSpeed = 1;
+    private int stepsToFreeze = 20;
     /**
-     * Percentage of burning of a building without firemen. A value -fireSpeed
-     * has to be applied when there are firemen surrounding the fire, at a total
-     * ratio of: {number of surrounding firemen} * {- fireSpeed}.
+     * This sets the light severity ratio of injured people. Grave severity will
+     * be 100 - lightSeverity.
      */
-    private int fireSpeed = 5;
+    private int lightSeverity = 90;
     /**
-     * Number of gas stations. This is the optional part of the practice.
-     * Develop it when you are sure the whole mandatory part is perfect.
+     * Cost (think about money) for each person rescued by a rural agent.
      */
-    private int gasStations = 0;
+    private int ruralAgentCost = 1;
+    /**
+     * Cost (think about money) for each person rescued by a helicopter.
+     */
+    private int helicopterCost = 20;
     /**
      * Total number of simulation steps.
      */
@@ -85,15 +83,13 @@ public class GameSettings implements java.io.Serializable {
      */
     protected Map<AgentType, List<Cell>> agentList;
     /**
-     * Computed summary of the list of fires. The integer value introduces
-     * the burned ratio of the building.
+     * Computed summary of the available list of injured people.
      */
-    protected Map<Cell, Integer> fireList;
+    protected List<InjuredPeople> injuredPeople;
     /**
      * Title to set to the GUI.
      */
     protected String title = "Demo title";
-    
 
     public float getSeed() {
         return seed;
@@ -102,60 +98,6 @@ public class GameSettings implements java.io.Serializable {
     @XmlElement(required = true)
     public void setSeed(float seed) {
         this.seed = seed;
-    }
-
-    public int[] getHospitalCapacities() {
-        return hospitalCapacities;
-    }
-
-    @XmlElement(required = true)
-    public void setHospitalCapacities(int[] capacities) {
-        this.hospitalCapacities = capacities;
-    }
-
-    public int getStepsToHealth() {
-        return stepsToHealth;
-    }
-
-    @XmlElement(required = true)
-    public void setStepsToHealth(int stepsToHealth) {
-        this.stepsToHealth = stepsToHealth;
-    }
-
-    public int getPeoplePerAmbulance() {
-        return peoplePerAmbulance;
-    }
-
-    @XmlElement(required = true)
-    public void setPeoplePerAmbulance(int peoplePerAmbulance) {
-        this.peoplePerAmbulance = peoplePerAmbulance;
-    }
-
-    public int getAmbulanceLoadingSpeed() {
-        return ambulanceLoadingSpeed;
-    }
-
-    @XmlElement(required = true)
-    public void setAmbulanceLoadingSpeed(int ambulanceLoadingSpeed) {
-        this.ambulanceLoadingSpeed = ambulanceLoadingSpeed;
-    }
-
-    public int getFireSpeed() {
-        return fireSpeed;
-    }
-
-    @XmlElement(required = true)
-    public void setFireSpeed(int fireSpeed) {
-        this.fireSpeed = fireSpeed;
-    }
-
-    public int getGasStations() {
-        return gasStations;
-    }
-
-    @XmlElement(required = true)
-    public void setGasStations(int gasStations) {
-        this.gasStations = gasStations;
     }
 
     public int getSimulationSteps() {
@@ -171,22 +113,24 @@ public class GameSettings implements java.io.Serializable {
         return title;
     }
 
-    @XmlElement(required=true)
+    @XmlElement(required = true)
     public void setTitle(String title) {
         this.title = title;
     }
 
     /**
      * Gets the full current city map.
+     *
      * @return the current city map.
      */
     @XmlTransient
     public Cell[][] getMap() {
         return map;
     }
-    
+
     /**
      * Gets the cell given its coordinate.
+     *
      * @param row row number (zero based)
      * @param col column number (zero based).
      * @return a city's Cell.
@@ -195,32 +139,87 @@ public class GameSettings implements java.io.Serializable {
         return map[row][col];
     }
 
+    public int getPeoplePerHelicopter() {
+        return peoplePerHelicopter;
+    }
+
+    @XmlElement(required = true)
+    public void setPeoplePerHelicopter(int peoplePerHelicopter) {
+        this.peoplePerHelicopter = peoplePerHelicopter;
+    }
+
+    public int getLoadingSpeed() {
+        return loadingSpeed;
+    }
+
+    @XmlElement(required = true)
+    public void setLoadingSpeed(int loadingSpeed) {
+        this.loadingSpeed = loadingSpeed;
+    }
+
+    public int getAvalancheDuration() {
+        return avalancheDuration;
+    }
+
+    @XmlElement(required = true)
+    public void setAvalancheDuration(int avalancheDuration) {
+        this.avalancheDuration = avalancheDuration;
+    }
+
+    public int getStepsToFreeze() {
+        return stepsToFreeze;
+    }
+
+    @XmlElement(required = true)
+    public void setStepsToFreeze(int stepsToFreeze) {
+        this.stepsToFreeze = stepsToFreeze;
+    }
+
+    public int getLightSeverity() {
+        return lightSeverity;
+    }
+
+    @XmlElement(required = true)
+    public void setLightSeverity(int lightSeverity) {
+        this.lightSeverity = lightSeverity;
+    }
+
+    public int getRuralAgentCost() {
+        return ruralAgentCost;
+    }
+
+    @XmlElement(required = true)
+    public void setRuralAgentCost(int ruralAgentCost) {
+        this.ruralAgentCost = ruralAgentCost;
+    }
+
+    public int getHelicopterCost() {
+        return helicopterCost;
+    }
+
+    @XmlElement(required = true)
+    public void setHelicopterCost(int helicopterCost) {
+        this.helicopterCost = helicopterCost;
+    }
+
     @XmlTransient
     public Map<AgentType, List<Cell>> getAgentList() {
         return agentList;
     }
 
-    public void setAgentList(Map<AgentType, List<Cell>> agentList) {
-        this.agentList = agentList;
-    }
-
     @XmlTransient
-    public Map<Cell, Integer> getFireList() {
-        return fireList;
+    public List<InjuredPeople> getInjuredPeople() {
+        return injuredPeople;
     }
 
-    public void setFireList(Map<Cell, Integer> fireList) {
-        this.fireList = fireList;
-    }
-    
     public String toString() {
         //TODO: show a human readable summary of the game settings.
         return "Game settings";
     }
-    
+
     public String getShortString() {
-        //TODO: list of agents, hospitals and gas stations (if any)
+        //TODO: list of agents and other relevant settings.
         return "Game settings: agent related string";
     }
-    
+
 }

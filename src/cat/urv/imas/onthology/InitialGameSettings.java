@@ -1,5 +1,5 @@
 /**
- * IMAS base code for the practical work. 
+ * IMAS base code for the practical work.
  * Copyright (C) 2014 DEIM - URV
  *
  * This program is free software: you can redistribute it and/or modify it under
@@ -18,14 +18,16 @@
 package cat.urv.imas.onthology;
 
 import cat.urv.imas.agent.AgentType;
-import cat.urv.imas.map.StreetCell;
+import cat.urv.imas.map.PathCell;
 import cat.urv.imas.map.Cell;
 import cat.urv.imas.map.HospitalCell;
-import cat.urv.imas.map.BuildingCell;
-import cat.urv.imas.map.GasStationCell;
+import cat.urv.imas.map.MountainCell;
+import cat.urv.imas.map.MountainHutCell;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
@@ -34,44 +36,36 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Initial game settings and automatic loading from file.
- * 
+ *
  * Use the GenerateGameSettings to build the game.settings configuration file.
  */
 @XmlRootElement(name = "InitialGameSettings")
 public class InitialGameSettings extends GameSettings {
-    
+
     /*
      * Constants that define the type of content into the initialMap.
      * Any other value in a cell means that a cell is a building and
      * the value is the number of people in it.
-     * 
-     * Cells with mobile vehicles are street cells after vehicles 
+     *
+     * Cells with mobile vehicles are street cells after vehicles
      * move around.
      */
     /**
-     * Street cell.
+     * Path cell.
      */
-    public static final int S = 0;
+    public static final int P = 0;
     /**
      * Hospital cell.
      */
     public static final int H = -1;
     /**
-     * Firemen cell.
+     * Mountain cell.
      */
-    public static final int F = -2;
+    public static final int M = -2;
     /**
-     * Ambulance cell.
+     * Mountain hut cell.
      */
-    public static final int A = -3;
-    /**
-     * Private vehicle cell.
-     */
-    public static final int P = -4;
-    /**
-     * Gas station cell.
-     */
-    public static final int G = -5;
+    public static final int MH = -3;
 
     /**
      * City initialMap. Each number is a cell. The type of each is expressed by a
@@ -80,26 +74,37 @@ public class InitialGameSettings extends GameSettings {
      */
     private int[][] initialMap
             = {
-                {10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10},
-                {10, S, S, S, S, S, S, S, S, S, S, P, S, S, S, S, S, S, S, 10},
-                {10, S, A, S, S, S, S, F, S, S, S, S, S, S, S, S, S, S, F, 10},
-                {10, S, S, 10, 10, 10, 10, 10, 10, S, S, 10, 10, 10, 10, 10, 10, 10, 10, 10},
-                {10, S, S, 10, 10, 10, 10, 10, 10, S, S, 10, 10, 10, 10, 10, 10, 10, 10, 10},
-                {10, F, S, 10, 10, S, S, S, S, S, S, 10, 10, S, S, S, S, S, S, 10},
-                {10, S, S, 10, 10, S, S, S, S, S, S, 10, 10, S, S, S, S, S, S, 10},
-                {10, S, S, 10, 10, S, S, 10, 10, S, S, 10, 10, S, S, 10, 10, S, S, 10},
-                {10, S, S, 10, 10, S, S, H, 10, S, S, 10, 10, S, S, 10, 10, S, S, 10},
-                {10, S, S, 10, 10, S, S, 10, 10, S, S, 10, 10, S, S, 10, 10, S, S, 10},
-                {10, S, S, 10, 10, S, S, 10, 10, S, S, 10, 10, S, S, 10, 10, S, S, 10},
-                {10, S, S, 10, 10, S, S, 10, 10, S, A, 10, 10, S, S, 10, 10, S, S, 10},
-                {10, S, S, 10, 10, S, S, 10, 10, S, S, 10, 10, S, S, H, 10, S, S, 10},
-                {10, S, S, 10, 10, S, S, 10, 10, S, S, 10, 10, S, S, 10, 10, F, S, 10},
-                {10, S, S, 10, 10, S, S, 10, 10, S, S, 10, 10, S, S, 10, 10, F, S, 10},
-                {10, S, S, 10, 10, S, S, 10, 10, S, S, 10, 10, S, S, 10, 10, S, S, 10},
-                {10, S, S, H, 10, S, S, 10, 10, S, S, 10, 10, S, S, 10, 10, S, S, 10},
-                {10, S, A, S, F, S, S, 10, 10, S, S, S, S, S, S, 10, 10, S, S, 10},
-                {10, S, S, S, S, S, S, 10, 10, S, S, S, S, S, S, 10, 10, A, S, 10},
-                {10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10},};
+                {M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M},
+                {M, MH, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, M},
+                {M, M, P, M, M, M, M, P, M, M, P, M, M, M, M, M, M, M, P, M},
+                {M, M, P, M, M, M, M, P, MH, M, P, M, M, M, M, M, M, M, P, M},
+                {M, M, P, M, M, M, M, P, M, M, P, M, M, M, M, M, M, M, P, M},
+                {M, M, P, M, M, P, P, P, P, P, P, M, M, P, P, P, P, P, P, M},
+                {M, P, P, M, M, P, M, M, M, M, P, M, M, P, M, M, M, MH, P, M},
+                {M, P, M, M, M, P, M, M, M, P, P, M, M, P, P, M, M, M, P, M},
+                {M, P, M, M, M, P, M, M, M, P, M, M, M, M, P, M, M, M, P, M},
+                {M, P, M, M, M, P, M, M, M, P, M, M, M, M, P, M, M, M, P, M},
+                {M, P, M, M, M, P, M, M, M, P, M, M, M, M, P, M, M, M, P, M},
+                {M, P, M, M, M, P, M, M, M, P, M, M, M, M, P, M, M, M, P, M},
+                {M, P, MH, M, M, P, M, M, M, P, M, M, M, MH, P, H, M, P, P, M},
+                {M, P, P, M, M, P, M, M, M, P, P, M, M, M, P, M, M, P, M, M},
+                {M, M, P, M, M, P, M, M, M, M, P, M, M, M, P, M, M, P, M, M},
+                {M, M, P, M, M, P, M, M, M, M, P, M, M, M, P, M, M, P, M, M},
+                {M, P, P, M, M, P, P, M, M, P, P, M, M, M, P, M, M, P, P, M},
+                {M, P, M, M, H, M, P, MH, M, P, M, M, M, M, P, M, M, M, P, M},
+                {M, P, P, P, P, P, P, M, M, P, P, P, P, P, P, M, M, MH, P, M},
+                {M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M},};
+
+    /**
+     * Each number in the list means the number of the helicopters appearing
+     * on each hospital, in the order that appear in the map.
+     */
+    private List<Integer> numberOfHelicoptersPerHospital = new LinkedList();
+    /**
+     * Each number in the list means the number of rural agents appearing in
+     * each mountain hut, in the order they appear in the map.
+     */
+    private List<Integer> numberOfRuralAgentsPerMountainHut = new LinkedList();
 
     public int[][] getInitialMap() {
         return initialMap;
@@ -110,12 +115,44 @@ public class InitialGameSettings extends GameSettings {
         this.initialMap = initialMap;
     }
 
+    public List<Integer> getNumberOfHelicoptersPerHospital() {
+        return numberOfHelicoptersPerHospital;
+    }
+
+    @XmlElement(required = true)
+    public void setNumberOfHelicoptersPerHospital(List<Integer> numberOfHelicoptersPerHospital) {
+        this.numberOfHelicoptersPerHospital = numberOfHelicoptersPerHospital;
+    }
+
+    public List<Integer> getNumberOfRuralAgentsPerMountainHut() {
+        return numberOfRuralAgentsPerMountainHut;
+    }
+
+    @XmlElement(required = true)
+    public void setNumberOfRuralAgentsPerMountainHut(List<Integer> numberOfRuralAgentsPerMountainHut) {
+        this.numberOfRuralAgentsPerMountainHut = numberOfRuralAgentsPerMountainHut;
+    }
+
+    public InitialGameSettings() {
+        // place a helicopter in each hospital
+        numberOfHelicoptersPerHospital.add(1);
+        numberOfHelicoptersPerHospital.add(1);
+        // place a rural agent in each mountain hut
+        numberOfRuralAgentsPerMountainHut.add(1);
+        numberOfRuralAgentsPerMountainHut.add(1);
+        numberOfRuralAgentsPerMountainHut.add(1);
+        numberOfRuralAgentsPerMountainHut.add(1);
+        numberOfRuralAgentsPerMountainHut.add(1);
+        numberOfRuralAgentsPerMountainHut.add(1);
+        numberOfRuralAgentsPerMountainHut.add(1);
+    }
+
     public static final GameSettings load(String filename) {
         if (filename == null) {
             filename = "game.settings";
         }
         try {
-            // create JAXBContext which will be used to update writer 		
+            // create JAXBContext which will be used to update writer
             JAXBContext context = JAXBContext.newInstance(InitialGameSettings.class);
             Unmarshaller u = context.createUnmarshaller();
             InitialGameSettings starter = (InitialGameSettings) u.unmarshal(new FileReader(filename));
@@ -136,65 +173,64 @@ public class InitialGameSettings extends GameSettings {
         int rows = this.initialMap.length;
         int cols = this.initialMap[0].length;
         map = new Cell[rows][cols];
-        int hospitalIndex = 0;
-        int hospitalCapacity;
-        int[] hospitalCapacities = this.getHospitalCapacities();
         this.agentList = new HashMap();
-        
+        Iterator<Integer> helicopters = numberOfHelicoptersPerHospital.iterator();
+        Iterator<Integer> ruralAgents = numberOfRuralAgentsPerMountainHut.iterator();
+
         int cell;
-        StreetCell c;
+        Cell c;
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
                 cell = initialMap[row][col];
                 switch (cell) {
-                    case A: 
-                        c = new StreetCell(row, col);
-                        c.addAgent(new InfoAgent(AgentType.AMBULANCE));
+                    case P:
+                        c = new PathCell(row, col);
                         map[row][col] = c;
-                        addAgentToList(AgentType.AMBULANCE, c);
-                        break;
-                    case F:
-                        c = new StreetCell(row, col);
-                        c.addAgent(new InfoAgent(AgentType.FIREMAN));
-                        map[row][col] = c;
-                        addAgentToList(AgentType.FIREMAN, c);
-                        break;
-                    case P: 
-                        c = new StreetCell(row, col);
-                        c.addAgent(new InfoAgent(AgentType.PRIVATE_VEHICLE));
-                        map[row][col] = c;
-                        addAgentToList(AgentType.PRIVATE_VEHICLE, c);
-                        break;
-                    case S:
-                        map[row][col] = new StreetCell(row, col);
-                        break;
-                    case G:
-                        map[row][col] = new GasStationCell(row, col);
                         break;
                     case H:
-                        if (hospitalIndex < hospitalCapacities.length) {
-                            hospitalCapacity = hospitalCapacities[hospitalIndex];
-                            hospitalIndex++;
-                            map[row][col] = new HospitalCell(row, col, hospitalCapacity);
-                            addAgentToList(AgentType.HOSPITAL, map[row][col]);
+                        c = new HospitalCell(row, col);
+                        if (helicopters.hasNext()) {
+                            int amount = helicopters.next();
+                            for (int i = 0; i < amount; i++) {
+                                c.addAgent(new InfoAgent(AgentType.HELICOPTER));
+                            }
                         } else {
-                            throw new Error(getClass().getCanonicalName() + " : More hospitals in the map than given capacities");
+                            throw new Error(getClass().getCanonicalName() + " : Less helicopters in the map than in the list.");
                         }
+                        map[row][col] = c;
+                        addAgentToList(AgentType.HELICOPTER, c);
                         break;
-                    default: //positive value means number of citizens in a building.
-                        map[row][col] = new BuildingCell(cell, row, col);
+                    case M:
+                        c = new MountainCell(row, col);
+                        map[row][col] = c;
+                        break;
+                    case MH:
+                        c = new MountainHutCell(row, col);
+                        if (ruralAgents.hasNext()) {
+                            int amount = ruralAgents.next();
+                            for (int i = 0; i < amount; i++) {
+                                c.addAgent(new InfoAgent(AgentType.RURAL_AGENT));
+                            }
+                        } else {
+                            throw new Error(getClass().getCanonicalName() + " : Less rural agents in the list than in the map.");
+                        }
+                        map[row][col] = c;
+                        addAgentToList(AgentType.RURAL_AGENT, c);
                         break;
                 }
             }
         }
-        if (hospitalIndex != hospitalCapacities.length) {
-            throw new Error(getClass().getCanonicalName() + " : Less hospitals in the map than given capacities.");
+        if (ruralAgents.hasNext()) {
+            throw new Error(getClass().getCanonicalName() + " : Less rural agents in the map than in the list.");
+        }
+        if (helicopters.hasNext()) {
+            throw new Error(getClass().getCanonicalName() + " : Less hospitals in the map than in the list.");
         }
     }
 
     /**
      * Ensure agent list is correctly updated.
-     * 
+     *
      * @param type agent type.
      * @param cell cell where appears the agent.
      */

@@ -22,17 +22,17 @@ import cat.urv.imas.gui.CellVisualizer;
 /**
  * Cell map containing a gas station..
  */
-public class GasStationCell extends Cell {
+public class MountainHutCell extends Cell {
 
-    public GasStationCell(int x, int y) {
-        super(CellType.GAS_STATION, x, y);
+    public MountainHutCell(int x, int y) {
+        super(CellType.MOUNTAIN_HUT, x, y);
     }
     
     /* ***************** Map visualization API ********************************/
     
     @Override
     public void draw(CellVisualizer visual) {
-        visual.drawGasStation(this);
+        visual.drawMountainHut(this);
     }
 
 }

@@ -131,7 +131,7 @@ public class GraphicInterface extends JFrame {
         this.jStatisticsPanel = new StatisticsPanel();
         jGameTabbedPane.addTab("Statistics", icon, this.jStatisticsPanel);
 
-        this.jStatisticsPanel.showMessage("All tabs initialized successfully!");
+        //this.jStatisticsPanel.showMessage("All tabs initialized successfully!");
 
         // Tabbed panel
         this.getContentPane().add(jGameTabbedPane);
@@ -163,8 +163,8 @@ public class GraphicInterface extends JFrame {
      *
      * @param msg String per mostrar
      */
-    public void showStatistics(String msg) {
-        this.jStatisticsPanel.showMessage(msg);
+    public void showStatistics(Statistics statistics) {
+        this.jStatisticsPanel.showMessage(statistics.toString());
     }
 
     /**

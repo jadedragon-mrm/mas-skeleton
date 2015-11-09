@@ -56,14 +56,14 @@ public class InfoAgent implements java.io.Serializable {
     }
 
     /**
-     * Gets the hash code. To simplify it, just returns the hash code from itsç
-     * type.
+     * Gets the hash code. To simplify it, just returns the hash code from its
+     * agent Id.
      *
-     * @return
+     * @return hash code, equivalent to the hash code from the agent Id.
      */
     @Override
     public int hashCode() {
-        return type.hashCode();
+        return this.getAID().hashCode();
     }
 
     /**

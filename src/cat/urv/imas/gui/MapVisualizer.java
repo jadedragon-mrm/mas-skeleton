@@ -1,7 +1,6 @@
 package cat.urv.imas.gui;
 
 import javax.swing.*;
-import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.Toolkit;
 import java.awt.Point;
@@ -11,11 +10,11 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.RenderingHints;
-import cat.urv.imas.map.BuildingCell;
 import cat.urv.imas.map.Cell;
-import cat.urv.imas.map.GasStationCell;
 import cat.urv.imas.map.HospitalCell;
-import cat.urv.imas.map.StreetCell;
+import cat.urv.imas.map.MountainCell;
+import cat.urv.imas.map.MountainHutCell;
+import cat.urv.imas.map.PathCell;
 
 /**
  * Visualization of the map. There are several elements to depict, as buildings,
@@ -54,10 +53,6 @@ public class MapVisualizer extends JPanel implements CellVisualizer {
      */
     private final Rectangle2D.Double cellBorder;
     /**
-     * The way agents are shown into the map.
-     */
-    private final Ellipse2D.Double agentFigure;
-    /**
      * Graphics when painting the city map.
      *
      * @see cat.urv.imas.gui.CellVisualizer
@@ -82,7 +77,6 @@ public class MapVisualizer extends JPanel implements CellVisualizer {
         dy = ((end.y - start.y) / nrows) - 4;
 
         cellBorder = new Rectangle2D.Double(GAP + 10, GAP + 10, dx, dy);
-        agentFigure = new Ellipse2D.Double(GAP + 10 + (dx / 4), GAP + 10 + (dy / 4), (dx / 2), (dy / 2));
 
     }
 
@@ -127,15 +121,7 @@ public class MapVisualizer extends JPanel implements CellVisualizer {
         super.paintComponent(g);
     }
 
-    protected Ellipse2D.Double getCircle() {
-        return (agentFigure);
-    }
-
     protected void drawAgent(Color fillingColor, String message, Color textColor) {
-        temporaryGraphics.setPaint(fillingColor);
-        temporaryGraphics.translate((dx / 6), (dy / 6));
-        temporaryGraphics.fill(agentFigure);
-        temporaryGraphics.translate(-(dx / 6), -(dy / 6));
         drawString(message, textColor, dx - 40, dy - 10);
     }
 
@@ -180,21 +166,26 @@ public class MapVisualizer extends JPanel implements CellVisualizer {
     }
 
     @Override
-    public void drawPrivateVehicle(StreetCell cell) {
-        drawEmptyStreet(cell);
-        drawAgent(Color.CYAN, cell.getMapMessage(), Color.BLACK);
+    public void drawPath(PathCell cell) {
+        drawEmptyCell(cell);
+        drawString(cell.getMapMessage(), Color.BLACK, dx - 40, dy);
     }
 
     @Override
-    public void drawAmbulance(StreetCell cell) {
-        drawEmptyStreet(cell);
-        drawAgent(Color.WHITE, cell.getMapMessage(), Color.BLACK);
+    public void drawAvalanche(PathCell cell) {
+        drawCell(Color.WHITE, Color.DARK_GRAY);
     }
 
     @Override
-    public void drawFireman(StreetCell cell) {
-        drawEmptyStreet(cell);
-        drawAgent(Color.RED, cell.getMapMessage(), Color.BLACK);
+    public void drawMountain(MountainCell cell) {
+        drawCell(Color.GREEN.darker(), Color.GREEN.darker());
+        drawString(cell.getMapMessage(), Color.BLACK, dx - 40, dy);
+    }
+
+    @Override
+    public void drawMountainHut(MountainHutCell cell) {
+        drawCell(Color.orange.darker(), Color.GRAY.darker());
+        drawString(cell.getMapMessage(), Color.BLACK, dx - 40, dy);
     }
 
     @Override
@@ -203,21 +194,7 @@ public class MapVisualizer extends JPanel implements CellVisualizer {
         drawString(cell.getMapMessage(), Color.BLACK, dx - 40, dy);
     }
 
-    @Override
-    public void drawEmptyStreet(StreetCell cell) {
+    private void drawEmptyCell(PathCell cell) {
         drawCell(Color.LIGHT_GRAY, Color.DARK_GRAY);
     }
-
-    @Override
-    public void drawBuilding(BuildingCell cell) {
-        drawCell(Color.CYAN.darker(), Color.DARK_GRAY);
-        drawString(cell.getMapMessage(), Color.WHITE, dx - 40, dy);
-    }
-
-    @Override
-    public void drawGasStation(GasStationCell cell) {
-        drawCell(Color.RED, Color.GREEN);
-        drawString(cell.getMapMessage(), Color.BLACK, dx - 40, dy);
-    }
-
 }

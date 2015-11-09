@@ -1,19 +1,19 @@
 /**
- *  IMAS base code for the practical work.
- *  Copyright (C) 2014 DEIM - URV
+ * IMAS base code for the practical work.
+ * Copyright (C) 2014 DEIM - URV
  *
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with
+ * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package cat.urv.imas.agent;
 
@@ -21,12 +21,12 @@ import cat.urv.imas.onthology.InitialGameSettings;
 import cat.urv.imas.onthology.GameSettings;
 import cat.urv.imas.gui.GraphicInterface;
 import cat.urv.imas.behaviour.central.RequestResponseBehaviour;
+import cat.urv.imas.gui.Statistics;
 import jade.core.*;
 import jade.domain.*;
 import jade.domain.FIPAAgentManagement.*;
 import jade.domain.FIPANames.InteractionProtocol;
 import jade.lang.acl.*;
-
 
 /**
  * Central agent that controls the GUI and loads initial configuration settings.
@@ -40,8 +40,8 @@ public class CentralAgent extends ImasAgent {
      */
     private GraphicInterface gui;
     /**
-     * Game settings. At the very beginning, it will contain the loaded
-     * initial configuration settings.
+     * Game settings. At the very beginning, it will contain the loaded initial
+     * configuration settings.
      */
     private GameSettings game;
     /**
@@ -49,6 +49,10 @@ public class CentralAgent extends ImasAgent {
      * round.
      */
     private AID coordinatorAgent;
+    /**
+     * Set of statistics to show up.
+     */
+    private Statistics statistics;
 
     /**
      * Builds the Central agent.
@@ -58,21 +62,21 @@ public class CentralAgent extends ImasAgent {
     }
 
     /**
-     * A message is shown in the log area of the GUI, as well as in the 
-     * stantard output.
+     * A message is shown in the log area of the GUI, as well as in the stantard
+     * output.
      *
      * @param log String to show
      */
     @Override
     public void log(String log) {
         if (gui != null) {
-            gui.log(getLocalName()+ ": " + log + "\n");
+            gui.log(getLocalName() + ": " + log + "\n");
         }
         super.log(log);
     }
-    
+
     /**
-     * An error message is shown in the log area of the GUI, as well as in the 
+     * An error message is shown in the log area of the GUI, as well as in the
      * error output.
      *
      * @param error Error to show
@@ -80,7 +84,7 @@ public class CentralAgent extends ImasAgent {
     @Override
     public void errorLog(String error) {
         if (gui != null) {
-            gui.log("ERROR: " + getLocalName()+ ": " + error + "\n");
+            gui.log("ERROR: " + getLocalName() + ": " + error + "\n");
         }
         super.errorLog(error);
     }
@@ -93,7 +97,16 @@ public class CentralAgent extends ImasAgent {
     public GameSettings getGame() {
         return this.game;
     }
-    
+
+    /**
+     * Informs about the set of statistics.
+     *
+     * @return statistics.
+     */
+    public Statistics getStatistics() {
+        return this.statistics;
+    }
+
     /**
      * Agent setup method - called when it first come on-line. Configuration of
      * language to use, ontology and initialization of behaviours.
@@ -109,7 +122,7 @@ public class CentralAgent extends ImasAgent {
         sd1.setType(AgentType.CENTRAL.toString());
         sd1.setName(getLocalName());
         sd1.setOwnership(OWNER);
-        
+
         DFAgentDescription dfd = new DFAgentDescription();
         dfd.addServices(sd1);
         dfd.setName(getAID());
@@ -124,10 +137,12 @@ public class CentralAgent extends ImasAgent {
         // 2. Load game settings.
         this.game = InitialGameSettings.load("game.settings");
         log("Initial configuration settings loaded");
+        this.statistics = new Statistics(this.game.getRuralAgentCost(), this.game.getHelicopterCost());
 
         // 3. Load GUI
         try {
             this.gui = new GraphicInterface(game);
+            gui.showStatistics(statistics);
             gui.setVisible(true);
             log("GUI loaded");
         } catch (Exception e) {
@@ -149,9 +164,9 @@ public class CentralAgent extends ImasAgent {
         // Setup finished. When the last inform is received, the agent itself will add
         // a behaviour to send/receive actions
     }
-    
+
     public void updateGUI() {
-        System.out.println("CENTRAL AGENT:" + this.game.get(2, 2).toString());
+        this.gui.showStatistics(statistics);
         this.gui.updateGame();
     }
 

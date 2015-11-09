@@ -17,13 +17,27 @@
  */
 package cat.urv.imas.map;
 
+import cat.urv.imas.gui.CellVisualizer;
+
 /**
- * This class defines the kind of cells in the map.
+ * Building cell.
  */
-public enum CellType implements java.io.Serializable {
-    HOSPITAL,
-    MOUNTAIN,
-    PATH,
-    AVALANCHE,
-    MOUNTAIN_HUT,
+public class MountainCell extends Cell {
+
+    /**
+     * Builds a cell corresponding to mountain.
+     *
+     * @param row row number.
+     * @param col column number.
+     */
+    public MountainCell(int row, int col) {
+        super(CellType.MOUNTAIN, row, col);
+    }
+
+    /* ***************** Map visualization API ********************************/
+    
+    @Override
+    public void draw(CellVisualizer visual) {
+        visual.drawMountain(this);
+    }
 }
