@@ -13,16 +13,14 @@ the main cooperation mechanism.
 
 # Scenario
 
-A 2D city with several kind of agents (ambulances, firemen, hospitals)
-are represented in the map, with private vehicles moving around.
-The city map is formed by buildings and street cells where private 
-vehicles and mobile agents can move throughout.
+A 2D mountain scenario with several kind of agents (rural agents and helicopters)
+are represented in the map. The map is formed by mountains and paths where
+rural agent can move throughout.
 
-See the IMAS1415.md document to see the practical definition for the
-first semester of the academic course 2014-15.
+This is for the practical work for the 2015-16 academic year.
 
 To make it easy, the game will run in simulation steps. All necessary
-communication is expected to be performed in every single simulation step
+communication is expected to be performed in every single simulation step.
 
 
 # Content
@@ -32,7 +30,7 @@ with. To build the multi agent system, we use JADE.
 
 There are two run profiles:
 
-1. Run the multi agent system, showing up the city map in 2D.
+1. Run the multi agent system, showing up the map in 2D.
 1. Run the game settings builder.
 
 You can build your running scripts starting with those profiles.
@@ -67,4 +65,4 @@ This work is distributed under [GPL license](http://www.gnu.org/copyleft/gpl.htm
 ```
 
 JADE is also included in binary format (*.jar) in the `lib/` directory,
- with its corresponding license there.
+with its corresponding license there.
