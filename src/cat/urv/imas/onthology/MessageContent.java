@@ -23,7 +23,7 @@ package cat.urv.imas.onthology;
 public class MessageContent {
     
     /**
-     * Message sent from Coordinator agent to Central agent to get the whole
+     * Message sent from Coordinator agent to System agent to get the whole
      * city information.
      */
     public static final String GET_MAP = "Get map";

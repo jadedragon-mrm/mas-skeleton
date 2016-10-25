@@ -20,19 +20,36 @@ package cat.urv.imas.map;
 import cat.urv.imas.gui.CellVisualizer;
 
 /**
- * Cell map containing a gas station..
+ * Cell that represents a recycling center.
  */
-public class GasStationCell extends Cell {
+public class RecyclingCenterCell extends Cell {
 
-    public GasStationCell(int x, int y) {
-        super(CellType.GAS_STATION, x, y);
+    /**
+     * Prices of recycling plastic, glass and paper, respectively.
+     */
+    private final int[] prices;
+
+    /**
+     * Initializes a cell with a hospital.
+     *
+     * @param row row number (zero based).
+     * @param col col number (zero based).
+     * @param prices prices of recycling plastic, glass and paper, respectively.
+     */
+    public RecyclingCenterCell(int row, int col, int[] prices) {
+        super(CellType.RECYCLING_CENTER, row, col);
+        this.prices = prices;
     }
-    
+
     /* ***************** Map visualization API ********************************/
-    
     @Override
     public void draw(CellVisualizer visual) {
-        visual.drawGasStation(this);
+        visual.drawRecyclingCenter(this);
     }
-
+    
+    @Override
+    public String getMapMessage() {
+        return prices[0] + "/" + prices[1] + "/" + prices[2];
+    }
+    
 }

@@ -1,6 +1,6 @@
 /**
  * IMAS base code for the practical work. 
- * Copyright (C) 2014 DEIM - URV
+ * Copyright (C) 2016 DEIM - URV
  *
  * This program is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -17,11 +17,23 @@
  */
 package cat.urv.imas.map;
 
+import cat.urv.imas.onthology.GarbageType;
+
 /**
- * This class defines the kind of cells in the map.
+ * Building cell API for System agent which allows to set new garbage in buildings.
+ * Set new garbage on building is restricted only to System agent, so that
+ * BuildingCell is the API provided to agents.
  */
-public enum CellType implements java.io.Serializable {
-    STREET,
-    BUILDING,
-    RECYCLING_CENTER
+public class SettableBuildingCell extends BuildingCell {
+    
+    public SettableBuildingCell(int row, int col) {
+        super(row, col);
+    }
+    
+    public void setGarbage(GarbageType type, int amount) {
+        if (!garbage.isEmpty()) {
+            throw new IllegalStateException("This building (" + this.getRow() + "," + this.getCol() + ") has garbage yet: " + this.getMapMessage());
+        }
+        garbage.put(type, amount);
+    }
 }

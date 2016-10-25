@@ -18,118 +18,79 @@
 package cat.urv.imas.map;
 
 import cat.urv.imas.gui.CellVisualizer;
+import cat.urv.imas.onthology.GarbageType;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Building cell.
  */
 public class BuildingCell extends Cell {
+    
+    /**
+     * When this garbage is not found yet, an empty list of garbage is returned.
+     */
+    protected static Map<GarbageType, Integer> empty = new HashMap();
 
     /**
-     * Initial number of citizens.
+     * Garbage of the building: it can only be of one type at a time.
+     * But, once generated, it can be of any type and amount.
      */
-    private int initialNumberOfCitizens = 0;
+    protected Map<GarbageType, Integer> garbage;
     /**
-     * Current number of citizens.
+     * If true, scouts have found this garbage. false when scouts have
+     * to find it yet.
      */
-    private int numberOfCitizens = 0;
+    protected boolean found = false;
+    
     /**
-     * This ratio shows wether this building is on fire and its percentage. If
-     * 0, means 0% burned, and no fire. Any other positive value means that the
-     * building is on fire and the corresponding burned ratio. If this value is
-     * 100, menas 100% burned and building is destroyed.
-     */
-    private int burnedRatio = 0;
-
-    /**
-     * Builds a cell corresponding to a building with the given initial number
-     * of citizens.
+     * Builds a cell corresponding to a building.
      *
-     * @param initialNumberOfCitizens Number of citizens in this building.
      * @param row row number.
      * @param col column number.
      */
-    public BuildingCell(int initialNumberOfCitizens, int row, int col) {
+    public BuildingCell(int row, int col) {
         super(CellType.BUILDING, row, col);
-        this.initialNumberOfCitizens = initialNumberOfCitizens;
-        this.numberOfCitizens = initialNumberOfCitizens;
+        garbage = new HashMap();
+    }
+    
+    /**
+     * Detects the real garbage on this building.
+     * @return the garbage on it.
+     */
+    public Map<GarbageType, Integer> detectGarbage() {
+        found = (!garbage.isEmpty());
+        return garbage;
     }
 
     /**
-     * Gets the initial number of citizens in the building.
-     *
-     * @return the initial number of citizens.
+     * Whenever the garbage has been detected, it informs about the 
+     * current garbage on this building. Otherwise, it will behave as if
+     * no garbage was in.
+     * @return the garbage on it.
      */
-    public int getInitialNumberOfCitizens() {
-        return this.initialNumberOfCitizens;
+    public Map<GarbageType, Integer> getGarbage() {
+        return (found) ? garbage : empty;
     }
-
+    
     /**
-     * Gets the current number of citizens in the building.
-     *
-     * @return the current number of citizens in the building.
+     * Removes an item of the current garbage, if any.
+     * When there is no more garbage after removing it, the set of 
+     * garbage is emptied.
      */
-    public int getNumberOfCitizens() {
-        return this.numberOfCitizens;
-    }
-
-    /**
-     * Tries to take up to the number of "citizens" from the building, and
-     * informs the real taken number of citizens if there are less than
-     * "citizens" people in the building.
-     *
-     * @param citizens Number of citizens to take from the building.
-     * @return the actual number of citizens taken from the building.
-     */
-    public int take(int citizens) {
-        int min = Math.min(numberOfCitizens, citizens);
-        numberOfCitizens -= min;
-        return min;
-    }
-
-    /**
-     * Gets the current burned ratio of the building.
-     *
-     * @return the current burned ratio of the building.
-     */
-    public int getBurnedRatio() {
-        return this.burnedRatio;
-    }
-
-    /**
-     * Updates the current burned ratio of the building with the given ratio. If
-     * the ratio is positive, the burned ratio will increment. Otherwise, if
-     * negative, fire is being put out.
-     *
-     * @param ratio Ratio of burning of increment (if positive) or decrement (if
-     * negative).
-     */
-    public void updateBurnedRatio(int ratio) {
-        this.burnedRatio -= ratio;
-        if (burnedRatio < 0) {
-            burnedRatio = 0;
-        } else if (burnedRatio > 100) {
-            burnedRatio = 100;
+    public void removeGarbage() {
+        if (found && garbage.size() > 0) {
+            for (Map.Entry<GarbageType, Integer> entry: garbage.entrySet()) {
+                if (entry.getValue() == 1) {
+                    garbage.clear();
+                    found = false;
+                } else {
+                    garbage.replace(entry.getKey(), entry.getValue()-1);
+                }
+            }
         }
     }
-
-    /**
-     * Tells whether the bulding is on fire.
-     *
-     * @return true if there is fire on the building. false otherwise.
-     */
-    public boolean isOnFire() {
-        return this.burnedRatio != 0;
-    }
-
-    /**
-     * Tells whether the building was destroyed by fire.
-     *
-     * @return true if burnedRatio is at 100%; false otherwise.
-     */
-    public boolean isDestroyed() {
-        return this.burnedRatio == 100;
-    }
-
+    
     /* ***************** Map visualization API ********************************/
     
     @Override
@@ -137,12 +98,24 @@ public class BuildingCell extends Cell {
         visual.drawBuilding(this);
     }
 
+    /**
+     * Shows the type of garbage and the amount of it, with the form:
+     * <pre>
+     *    {type}:{amount}
+     * </pre>
+     * or an empty string if no garbage is present. A star is placed at the end
+     * of the string if the garbage is found by scouts.
+     * @return String detail of the garbage present in this building.
+     */
     @Override
     public String getMapMessage() {
-        String message = String.valueOf(getNumberOfCitizens());
-        if (isOnFire()) {
-            message = String.valueOf(getBurnedRatio()) + "/" + message;
+        if (garbage.isEmpty()) {
+            return "";
         }
-        return message;
+        for (Map.Entry<GarbageType, Integer> entry: garbage.entrySet()) {
+            return entry.getKey().getShortString() + ":" + entry.getValue() + 
+                    ((found) ? "*" : "");
+        }
+        return "";
     }
 }

@@ -21,12 +21,41 @@ package cat.urv.imas.agent;
  * Types of agents.
  */
 public enum AgentType {
-    AMBULANCE,
-    FIREMAN,
-    PRIVATE_VEHICLE,
-    HOSPITAL,
-    FIREMEN_COORDINATOR,
-    HOSPITAL_COORDINATOR,
-    COORDINATOR,
-    CENTRAL
+    SCOUT {
+        @Override
+        public String getShortString() {
+            return "SC";
+        }
+    },
+    HARVESTER {
+        @Override
+        public String getShortString() {
+            return "H";
+        }
+    },
+    SCOUT_COORDINATOR {
+        @Override
+        public String getShortString() {
+            return "SCC";
+        }
+    },
+    HARVESTER_COORDINATOR {
+        @Override
+        public String getShortString() {
+            return "HC";
+        }
+    },
+    COORDINATOR {
+        @Override
+        public String getShortString() {
+            return "C";
+        }
+    },
+    SYSTEM {
+        @Override
+        public String getShortString() {
+            return "S";
+        }
+    };
+    public abstract String getShortString();
 }

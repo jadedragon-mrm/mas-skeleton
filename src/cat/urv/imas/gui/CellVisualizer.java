@@ -18,10 +18,7 @@
 package cat.urv.imas.gui;
 
 import java.awt.Graphics2D;
-import cat.urv.imas.map.BuildingCell;
-import cat.urv.imas.map.GasStationCell;
-import cat.urv.imas.map.HospitalCell;
-import cat.urv.imas.map.StreetCell;
+import cat.urv.imas.map.*;
 
 /**
  * Enabling draw each kind of cell.
@@ -30,17 +27,13 @@ public interface CellVisualizer {
     
     public void updateGraphics(Graphics2D graphics);
 
-    public void drawPrivateVehicle(StreetCell cell);
+    public void drawScout(StreetCell cell);
 
-    public void drawAmbulance(StreetCell cell);
+    public void drawHarvester(StreetCell cell);
 
-    public void drawFireman(StreetCell cell);
-
-    public void drawHospital(HospitalCell cell);
+    public void drawRecyclingCenter(RecyclingCenterCell cell);
 
     public void drawEmptyStreet(StreetCell cell);
 
     public void drawBuilding(BuildingCell cell);
-    
-    public void drawGasStation(GasStationCell cell);
 }

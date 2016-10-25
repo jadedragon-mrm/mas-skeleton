@@ -15,13 +15,13 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cat.urv.imas.behaviour.central;
+package cat.urv.imas.behaviour.system;
 
 import cat.urv.imas.agent.AgentType;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
-import cat.urv.imas.agent.CentralAgent;
+import cat.urv.imas.agent.SystemAgent;
 import cat.urv.imas.map.Cell;
 import cat.urv.imas.map.StreetCell;
 import cat.urv.imas.onthology.MessageContent;
@@ -29,26 +29,26 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * A request-responder behaviour for Central agent, answering to queries
+ * A request-responder behaviour for System agent, answering to queries
  * from the Coordinator agent. The Coordinator Agent sends a REQUEST of the whole
- * game information and the Central Agent sends an AGREE and then an INFORM
+ * game information and the System Agent sends an AGREE and then an INFORM
  * with the city information.
  */
 public class RequestResponseBehaviour extends AchieveREResponder {
 
     /**
-     * Sets up the Central agent and the template of messages to catch.
+     * Sets up the System agent and the template of messages to catch.
      *
      * @param agent The agent owning this behaviour
      * @param mt Template to receive future responses in this conversation
      */
-    public RequestResponseBehaviour(CentralAgent agent, MessageTemplate mt) {
+    public RequestResponseBehaviour(SystemAgent agent, MessageTemplate mt) {
         super(agent, mt);
         agent.log("Waiting REQUESTs from authorized agents");
     }
 
     /**
-     * When Central Agent receives a REQUEST message, it agrees. Only if
+     * When System Agent receives a REQUEST message, it agrees. Only if
      * message type is AGREE, method prepareResultNotification() will be invoked.
      * 
      * @param msg message received.
@@ -56,7 +56,7 @@ public class RequestResponseBehaviour extends AchieveREResponder {
      */
     @Override
     protected ACLMessage prepareResponse(ACLMessage msg) {
-        CentralAgent agent = (CentralAgent)this.getAgent();
+        SystemAgent agent = (SystemAgent)this.getAgent();
         ACLMessage reply = msg.createReply();
         try {
             Object content = (Object) msg.getContent();
@@ -91,7 +91,7 @@ public class RequestResponseBehaviour extends AchieveREResponder {
 
         // it is important to make the createReply in order to keep the same context of
         // the conversation
-        CentralAgent agent = (CentralAgent)this.getAgent();
+        SystemAgent agent = (SystemAgent)this.getAgent();
         ACLMessage reply = msg.createReply();
         reply.setPerformative(ACLMessage.INFORM);
 

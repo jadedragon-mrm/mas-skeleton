@@ -11,11 +11,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.RenderingHints;
-import cat.urv.imas.map.BuildingCell;
-import cat.urv.imas.map.Cell;
-import cat.urv.imas.map.GasStationCell;
-import cat.urv.imas.map.HospitalCell;
-import cat.urv.imas.map.StreetCell;
+import cat.urv.imas.map.*;
 
 /**
  * Visualization of the map. There are several elements to depict, as buildings,
@@ -136,7 +132,7 @@ public class MapVisualizer extends JPanel implements CellVisualizer {
         temporaryGraphics.translate((dx / 6), (dy / 6));
         temporaryGraphics.fill(agentFigure);
         temporaryGraphics.translate(-(dx / 6), -(dy / 6));
-        drawString(message, textColor, dx - 40, dy - 10);
+        drawString(message, textColor, dx - 80, dy - 10);
     }
 
     /**
@@ -180,27 +176,15 @@ public class MapVisualizer extends JPanel implements CellVisualizer {
     }
 
     @Override
-    public void drawPrivateVehicle(StreetCell cell) {
-        drawEmptyStreet(cell);
-        drawAgent(Color.CYAN, cell.getMapMessage(), Color.BLACK);
-    }
-
-    @Override
-    public void drawAmbulance(StreetCell cell) {
+    public void drawScout(StreetCell cell) {
         drawEmptyStreet(cell);
         drawAgent(Color.WHITE, cell.getMapMessage(), Color.BLACK);
     }
 
     @Override
-    public void drawFireman(StreetCell cell) {
+    public void drawHarvester(StreetCell cell) {
         drawEmptyStreet(cell);
         drawAgent(Color.RED, cell.getMapMessage(), Color.BLACK);
-    }
-
-    @Override
-    public void drawHospital(HospitalCell cell) {
-        drawCell(Color.PINK.brighter(), Color.DARK_GRAY);
-        drawString(cell.getMapMessage(), Color.BLACK, dx - 40, dy);
     }
 
     @Override
@@ -215,9 +199,9 @@ public class MapVisualizer extends JPanel implements CellVisualizer {
     }
 
     @Override
-    public void drawGasStation(GasStationCell cell) {
+    public void drawRecyclingCenter(RecyclingCenterCell cell) {
         drawCell(Color.RED, Color.GREEN);
-        drawString(cell.getMapMessage(), Color.BLACK, dx - 40, dy);
+        drawString(cell.getMapMessage(), Color.BLACK, dx - 80, dy);
     }
 
 }

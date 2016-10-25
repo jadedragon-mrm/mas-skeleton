@@ -27,7 +27,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowAdapter;
 
 /**
- * Main class of the graphical interface controlled by the Central Agent. It
+ * Main class of the graphical interface controlled by the System Agent. It
  * offers several methods to show the changes of the agents within the city, as
  * well as an area with the logs and an area with the main statistical results.
  */

@@ -41,36 +41,17 @@ public class GameSettings implements java.io.Serializable {
      */
     private float seed = 0.0f;
     /**
-     * List of number of beds per hospital. Therefore, a value "{10, 10, 10}"
-     * means there will be 3 hospitals with 10 beds each. The number of beds
-     * means hospital capacity in number of people in the hospital at the same
-     * simulation step.
+     * Price for recycling on recycling centers, for plastic, glass and paper. 
+     * Therefore, a value "{{1, 2, 3}}" means there will be a single recycling
+     * center and it will pay 1 coin for plastic, 2 coins for glass and
+     * 3 coins for paper. If there is a 0 coin at some point, it means
+     * there is no recycling process for that kind of garbage.
      */
-    private int[] hospitalCapacities = {10, 10, 10};
-    /**
-     * Number of steps a person needs to be in the hospital to health, before
-     * the person leaves the hospital.
-     */
-    private int stepsToHealth = 3;
-    /**
-     * Capacity of ambulances, in number of people.
-     */
-    private int peoplePerAmbulance = 3;
-    /**
-     * Number of people loaded into an ambulance per simulation step.
-     */
-    private int ambulanceLoadingSpeed = 1;
-    /**
-     * Percentage of burning of a building without firemen. A value -fireSpeed
-     * has to be applied when there are firemen surrounding the fire, at a total
-     * ratio of: {number of surrounding firemen} * {- fireSpeed}.
-     */
-    private int fireSpeed = 5;
-    /**
-     * Number of gas stations. This is the optional part of the practice.
-     * Develop it when you are sure the whole mandatory part is perfect.
-     */
-    private int gasStations = 0;
+    private int[][] recyclingCenterPrices = {
+        {9, 10, 0},
+        {10, 0, 9},
+        {0, 9, 10},
+    };
     /**
      * Total number of simulation steps.
      */
@@ -80,15 +61,34 @@ public class GameSettings implements java.io.Serializable {
      */
     protected Cell[][] map;
     /**
+     * From 0 to 100 (meaning percentage) of probability of having new
+     * garbage in the city at every step.
+     */
+    protected int newGarbageProbability = 10;
+    /**
+     * If there is new garbage in a certain simulation step, this number
+     * represents the maximum number of buildings affected by garbage.
+     */
+    protected int maxNumberBuildingWithNewGargabe = 5;
+    /**
+     * For each building with new garbage, this number represents the maximum
+     * amount of new garbage that can appear.
+     */
+    protected int maxAmountOfNewGargabe = 5;
+    /**
+     * All harvesters will have this capacity of garbage units.
+     */
+    protected int harvestersCapacity = 6;
+    /**
+     * In order of appearance of the harvesters, this is the list of garbage
+     * types suported by each harvester.
+     */
+    protected GarbageType[][] allowedGarbageTypePerHarvester;
+    /**
      * Computed summary of the position of agents in the city. For each given
      * type of mobile agent, we get the list of their positions.
      */
     protected Map<AgentType, List<Cell>> agentList;
-    /**
-     * Computed summary of the list of fires. The integer value introduces
-     * the burned ratio of the building.
-     */
-    protected Map<Cell, Integer> fireList;
     /**
      * Title to set to the GUI.
      */
@@ -104,58 +104,24 @@ public class GameSettings implements java.io.Serializable {
         this.seed = seed;
     }
 
-    public int[] getHospitalCapacities() {
-        return hospitalCapacities;
+    public int[][] getRecyclingCenterPrices() {
+        return recyclingCenterPrices;
     }
 
     @XmlElement(required = true)
-    public void setHospitalCapacities(int[] capacities) {
-        this.hospitalCapacities = capacities;
-    }
-
-    public int getStepsToHealth() {
-        return stepsToHealth;
-    }
-
-    @XmlElement(required = true)
-    public void setStepsToHealth(int stepsToHealth) {
-        this.stepsToHealth = stepsToHealth;
-    }
-
-    public int getPeoplePerAmbulance() {
-        return peoplePerAmbulance;
-    }
-
-    @XmlElement(required = true)
-    public void setPeoplePerAmbulance(int peoplePerAmbulance) {
-        this.peoplePerAmbulance = peoplePerAmbulance;
-    }
-
-    public int getAmbulanceLoadingSpeed() {
-        return ambulanceLoadingSpeed;
-    }
-
-    @XmlElement(required = true)
-    public void setAmbulanceLoadingSpeed(int ambulanceLoadingSpeed) {
-        this.ambulanceLoadingSpeed = ambulanceLoadingSpeed;
-    }
-
-    public int getFireSpeed() {
-        return fireSpeed;
-    }
-
-    @XmlElement(required = true)
-    public void setFireSpeed(int fireSpeed) {
-        this.fireSpeed = fireSpeed;
-    }
-
-    public int getGasStations() {
-        return gasStations;
-    }
-
-    @XmlElement(required = true)
-    public void setGasStations(int gasStations) {
-        this.gasStations = gasStations;
+    public void setRecyclingCenterPrices(int[][] prices) {
+        this.recyclingCenterPrices = prices;
+        int check = 0; // if 7, all garbage types are treated.
+        for (int i=0; i < prices.length; i++) {
+            for (int j=0; j < 3; j++) {
+                if (prices[i][j] != 0) {
+                    check |= 1 << j;
+                }
+            }
+        }
+        if (check != 7) {
+            throw new Error(getClass().getCanonicalName() + " : Not all garbage types are treated in this map.");
+        }
     }
 
     public int getSimulationSteps() {
@@ -175,7 +141,48 @@ public class GameSettings implements java.io.Serializable {
     public void setTitle(String title) {
         this.title = title;
     }
+    
+    public int getNewGarbageProbability() {
+        return newGarbageProbability;
+    }
 
+    @XmlElement(required=true)
+    public void setNewGarbageProbability(int newGarbageProbability) {
+        this.newGarbageProbability = newGarbageProbability;
+    }
+
+    public int getMaxNumberBuildingWithNewGargabe() {
+        return maxNumberBuildingWithNewGargabe;
+    }
+
+    @XmlElement(required=true)
+    public void setMaxNumberBuildingWithNewGargabe(int maxNumberBuildingWithNewGargabe) {
+        this.maxNumberBuildingWithNewGargabe = maxNumberBuildingWithNewGargabe;
+    }
+
+    public int getMaxAmountOfNewGargabe() {
+        return maxAmountOfNewGargabe;
+    }
+
+    @XmlElement(required=true)
+    public void setMaxAmountOfNewGargabe(int maxAmountOfNewGargabe) {
+        this.maxAmountOfNewGargabe = maxAmountOfNewGargabe;
+    }
+
+    @XmlTransient
+    public GarbageType[][] getAllowedGarbageTypePerHarvester() {
+        return allowedGarbageTypePerHarvester;
+    }
+
+    public int getHarvestersCapacity() {
+        return harvestersCapacity;
+    }
+
+    @XmlElement(required=true)
+    public void setHarvestersCapacity(int harvestersCapacity) {
+        this.harvestersCapacity = harvestersCapacity;
+    }
+    
     /**
      * Gets the full current city map.
      * @return the current city map.
@@ -183,6 +190,13 @@ public class GameSettings implements java.io.Serializable {
     @XmlTransient
     public Cell[][] getMap() {
         return map;
+    }
+    
+    public Cell[] detectBuildingsWithGarbage(int row, int col) {
+        //TODO: find all surrounding cells to (row,col) that are
+        //      buildings and have garbage on it.
+        //      Use: BuildingCell.detectGarbage() to do so.
+        return null;
     }
     
     /**
@@ -203,15 +217,6 @@ public class GameSettings implements java.io.Serializable {
     public void setAgentList(Map<AgentType, List<Cell>> agentList) {
         this.agentList = agentList;
     }
-
-    @XmlTransient
-    public Map<Cell, Integer> getFireList() {
-        return fireList;
-    }
-
-    public void setFireList(Map<Cell, Integer> fireList) {
-        this.fireList = fireList;
-    }
     
     public String toString() {
         //TODO: show a human readable summary of the game settings.
@@ -219,7 +224,7 @@ public class GameSettings implements java.io.Serializable {
     }
     
     public String getShortString() {
-        //TODO: list of agents, hospitals and gas stations (if any)
+        //TODO: list of agents
         return "Game settings: agent related string";
     }
     

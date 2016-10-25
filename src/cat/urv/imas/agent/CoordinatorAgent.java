@@ -28,7 +28,7 @@ import jade.lang.acl.*;
 
 /**
  * The main Coordinator agent. 
- * TODO: This coordinator agent should get the game settings from the Central
+ * TODO: This coordinator agent should get the game settings from the System
  * agent every round and share the necessary information to other coordinators.
  */
 public class CoordinatorAgent extends ImasAgent {
@@ -38,9 +38,9 @@ public class CoordinatorAgent extends ImasAgent {
      */
     private GameSettings game;
     /**
-     * Central agent id.
+     * System agent id.
      */
-    private AID centralAgent;
+    private AID systemAgent;
 
     /**
      * Builds the coordinator agent.
@@ -77,16 +77,16 @@ public class CoordinatorAgent extends ImasAgent {
             doDelete();
         }
 
-        // search CentralAgent
+        // search SystemAgent
         ServiceDescription searchCriterion = new ServiceDescription();
-        searchCriterion.setType(AgentType.CENTRAL.toString());
-        this.centralAgent = UtilsAgents.searchAgent(this, searchCriterion);
+        searchCriterion.setType(AgentType.SYSTEM.toString());
+        this.systemAgent = UtilsAgents.searchAgent(this, searchCriterion);
         // searchAgent is a blocking method, so we will obtain always a correct AID
 
         /* ********************************************************************/
         ACLMessage initialRequest = new ACLMessage(ACLMessage.REQUEST);
         initialRequest.clearAllReceiver();
-        initialRequest.addReceiver(this.centralAgent);
+        initialRequest.addReceiver(this.systemAgent);
         initialRequest.setProtocol(InteractionProtocol.FIPA_REQUEST);
         log("Request message to agent");
         try {

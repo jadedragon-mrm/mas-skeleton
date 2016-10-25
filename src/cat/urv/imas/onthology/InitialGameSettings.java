@@ -18,11 +18,10 @@
 package cat.urv.imas.onthology;
 
 import cat.urv.imas.agent.AgentType;
-import cat.urv.imas.map.StreetCell;
-import cat.urv.imas.map.Cell;
-import cat.urv.imas.map.HospitalCell;
-import cat.urv.imas.map.BuildingCell;
-import cat.urv.imas.map.GasStationCell;
+import cat.urv.imas.map.*;
+import static cat.urv.imas.onthology.GarbageType.GLASS;
+import static cat.urv.imas.onthology.GarbageType.PAPER;
+import static cat.urv.imas.onthology.GarbageType.PLASTIC;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,25 +52,17 @@ public class InitialGameSettings extends GameSettings {
      */
     public static final int S = 0;
     /**
-     * Hospital cell.
+     * Harvester cell.
      */
     public static final int H = -1;
     /**
-     * Firemen cell.
+     * Scout cell.
      */
-    public static final int F = -2;
+    public static final int SC = -2;
     /**
-     * Ambulance cell.
+     * Recycling center cell.
      */
-    public static final int A = -3;
-    /**
-     * Private vehicle cell.
-     */
-    public static final int P = -4;
-    /**
-     * Gas station cell.
-     */
-    public static final int G = -5;
+    public static final int R = -3;
 
     /**
      * City initialMap. Each number is a cell. The type of each is expressed by a
@@ -81,26 +72,50 @@ public class InitialGameSettings extends GameSettings {
     private int[][] initialMap
             = {
                 {10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10},
-                {10, S, S, S, S, S, S, S, S, S, S, P, S, S, S, S, S, S, S, 10},
-                {10, S, A, S, S, S, S, F, S, S, S, S, S, S, S, S, S, S, F, 10},
+                {10, S, S, S, S, S, S, S, S, S, S, H, S, S, S, S, S, S, S, 10},
+                {10, S, SC, S, S, S, S, H, S, S, S, S, S, S, S, S, S, S, H, 10},
                 {10, S, S, 10, 10, 10, 10, 10, 10, S, S, 10, 10, 10, 10, 10, 10, 10, 10, 10},
-                {10, S, S, 10, 10, 10, 10, 10, 10, S, S, 10, 10, 10, 10, 10, 10, 10, 10, 10},
-                {10, F, S, 10, 10, S, S, S, S, S, S, 10, 10, S, S, S, S, S, S, 10},
+                {10, S, S, 10, 10, 10, 10, 10, R, S, S, 10, 10, 10, 10, 10, 10, 10, 10, 10},
+                {10, SC, S, 10, 10, S, S, S, S, S, S, 10, 10, S, S, S, S, S, S, 10},
                 {10, S, S, 10, 10, S, S, S, S, S, S, 10, 10, S, S, S, S, S, S, 10},
                 {10, S, S, 10, 10, S, S, 10, 10, S, S, 10, 10, S, S, 10, 10, S, S, 10},
-                {10, S, S, 10, 10, S, S, H, 10, S, S, 10, 10, S, S, 10, 10, S, S, 10},
+                {10, S, S, 10, 10, S, H, 10, 10, S, S, 10, 10, S, S, 10, 10, S, S, 10},
                 {10, S, S, 10, 10, S, S, 10, 10, S, S, 10, 10, S, S, 10, 10, S, S, 10},
                 {10, S, S, 10, 10, S, S, 10, 10, S, S, 10, 10, S, S, 10, 10, S, S, 10},
-                {10, S, S, 10, 10, S, S, 10, 10, S, A, 10, 10, S, S, 10, 10, S, S, 10},
-                {10, S, S, 10, 10, S, S, 10, 10, S, S, 10, 10, S, S, H, 10, S, S, 10},
-                {10, S, S, 10, 10, S, S, 10, 10, S, S, 10, 10, S, S, 10, 10, F, S, 10},
-                {10, S, S, 10, 10, S, S, 10, 10, S, S, 10, 10, S, S, 10, 10, F, S, 10},
+                {10, S, S, 10, 10, S, S, 10, 10, S, SC, 10, 10, S, S, 10, 10, S, S, 10},
+                {10, S, S, 10, 10, S, S, 10, 10, S, S, 10, 10, S, S, R, 10, S, S, 10},
+                {10, S, S, 10, 10, S, S, 10, 10, S, S, 10, 10, S, S, 10, 10, H, S, 10},
+                {10, S, S, 10, 10, S, S, 10, 10, S, S, 10, 10, S, S, 10, 10, H, S, 10},
                 {10, S, S, 10, 10, S, S, 10, 10, S, S, 10, 10, S, S, 10, 10, S, S, 10},
-                {10, S, S, H, 10, S, S, 10, 10, S, S, 10, 10, S, S, 10, 10, S, S, 10},
-                {10, S, A, S, F, S, S, 10, 10, S, S, S, S, S, S, 10, 10, S, S, 10},
-                {10, S, S, S, S, S, S, 10, 10, S, S, S, S, S, S, 10, 10, A, S, 10},
+                {10, S, S, R, 10, S, S, 10, 10, S, S, 10, 10, S, S, 10, 10, S, S, 10},
+                {10, S, SC, S, H, S, S, 10, 10, S, S, S, S, S, S, 10, 10, S, S, 10},
+                {10, S, S, S, S, S, S, 10, 10, S, S, S, S, S, S, 10, 10, H, S, 10},
                 {10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10},};
 
+    /**
+     * Plastic short string.
+     */
+    public static final String L = PLASTIC.getShortString();
+    /**
+     * Paper short string.
+     */
+    public static final String P = PAPER.getShortString();
+    /**
+     * Glass short string.
+     */
+    public static final String G = GLASS.getShortString();
+    
+    private String[][] supportedGarbageByHarvesters = {
+        {L},
+        {P},
+        {G},
+        {G, P},
+        {L, P},
+        {G, L},
+        {G, P},
+        {G, P, L},
+    };
+    
     public int[][] getInitialMap() {
         return initialMap;
     }
@@ -108,6 +123,24 @@ public class InitialGameSettings extends GameSettings {
     @XmlElement(required = true)
     public void setInitialMap(int[][] initialMap) {
         this.initialMap = initialMap;
+    }
+
+    public String[][] getSupportedGarbageByHarvesters() {
+        return supportedGarbageByHarvesters;
+    }
+
+    @XmlElement(required = true)
+    public void setSupportedGarbageByHarvesters(String[][] supportedGarbageByHarvesters) {
+        this.supportedGarbageByHarvesters = supportedGarbageByHarvesters;
+        int rows = supportedGarbageByHarvesters.length;
+        this.allowedGarbageTypePerHarvester = new GarbageType[rows][];
+        for (int i=0; i < rows; i++) {
+            int cols = supportedGarbageByHarvesters[i].length;
+            this.allowedGarbageTypePerHarvester[i] = new GarbageType[cols];
+            for (int j=0; j < cols; j++) {
+                this.allowedGarbageTypePerHarvester[i][j] = GarbageType.fromShortString(supportedGarbageByHarvesters[i][j]);
+            }
+        }
     }
 
     public static final GameSettings load(String filename) {
@@ -136,9 +169,10 @@ public class InitialGameSettings extends GameSettings {
         int rows = this.initialMap.length;
         int cols = this.initialMap[0].length;
         map = new Cell[rows][cols];
-        int hospitalIndex = 0;
-        int hospitalCapacity;
-        int[] hospitalCapacities = this.getHospitalCapacities();
+        int recyclingCenterIndex = 0;
+        int allowedGarbageTypeIndex = 0;
+        int[] recyclingCenterPrice;
+        int[][] recyclingCenterPrices = this.getRecyclingCenterPrices();
         this.agentList = new HashMap();
         
         int cell;
@@ -147,51 +181,47 @@ public class InitialGameSettings extends GameSettings {
             for (int col = 0; col < cols; col++) {
                 cell = initialMap[row][col];
                 switch (cell) {
-                    case A: 
+                    case H: 
                         c = new StreetCell(row, col);
-                        c.addAgent(new InfoAgent(AgentType.AMBULANCE));
+                        if (allowedGarbageTypeIndex >= allowedGarbageTypePerHarvester.length) {
+                            throw new Error(getClass().getCanonicalName() + " : There are more harvesters than settings for them.");
+                        }
+                        c.addAgent(new HarvesterInfoAgent(AgentType.HARVESTER, allowedGarbageTypePerHarvester[allowedGarbageTypeIndex++], this.getHarvestersCapacity()));
                         map[row][col] = c;
-                        addAgentToList(AgentType.AMBULANCE, c);
+                        addAgentToList(AgentType.HARVESTER, c);
                         break;
-                    case F:
+                    case SC:
                         c = new StreetCell(row, col);
-                        c.addAgent(new InfoAgent(AgentType.FIREMAN));
+                        c.addAgent(new InfoAgent(AgentType.SCOUT));
                         map[row][col] = c;
-                        addAgentToList(AgentType.FIREMAN, c);
-                        break;
-                    case P: 
-                        c = new StreetCell(row, col);
-                        c.addAgent(new InfoAgent(AgentType.PRIVATE_VEHICLE));
-                        map[row][col] = c;
-                        addAgentToList(AgentType.PRIVATE_VEHICLE, c);
+                        addAgentToList(AgentType.SCOUT, c);
                         break;
                     case S:
                         map[row][col] = new StreetCell(row, col);
                         break;
-                    case G:
-                        map[row][col] = new GasStationCell(row, col);
-                        break;
-                    case H:
-                        if (hospitalIndex < hospitalCapacities.length) {
-                            hospitalCapacity = hospitalCapacities[hospitalIndex];
-                            hospitalIndex++;
-                            map[row][col] = new HospitalCell(row, col, hospitalCapacity);
-                            addAgentToList(AgentType.HOSPITAL, map[row][col]);
-                        } else {
-                            throw new Error(getClass().getCanonicalName() + " : More hospitals in the map than given capacities");
+                    case R:
+                        if (recyclingCenterIndex >= recyclingCenterPrices.length) {
+                            throw new Error(getClass().getCanonicalName() + " : More recycling centers in the map than given prices");
                         }
+                        recyclingCenterPrice = recyclingCenterPrices[recyclingCenterIndex++];
+                        map[row][col] = new RecyclingCenterCell(row, col, recyclingCenterPrice);
                         break;
-                    default: //positive value means number of citizens in a building.
-                        map[row][col] = new BuildingCell(cell, row, col);
+                    default: //positive value means building.
+                        // agents has to check for BuildingCell casts. 
+                        // Only SystemAgent can access to the SettableBuildingCell
+                        map[row][col] = new SettableBuildingCell(row, col);
                         break;
                 }
             }
         }
-        if (hospitalIndex != hospitalCapacities.length) {
-            throw new Error(getClass().getCanonicalName() + " : Less hospitals in the map than given capacities.");
+        if (recyclingCenterIndex != recyclingCenterPrices.length) {
+            throw new Error(getClass().getCanonicalName() + " : Less recycling centers in the map than given prices.");
+        }
+        if (this.allowedGarbageTypePerHarvester.length != this.getAgentList().get(AgentType.HARVESTER).size()) {
+            throw new Error(getClass().getCanonicalName() + " : There are less harvesters than settings.");
         }
     }
-
+    
     /**
      * Ensure agent list is correctly updated.
      * 

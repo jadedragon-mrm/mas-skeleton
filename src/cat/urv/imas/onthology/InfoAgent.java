@@ -105,4 +105,11 @@ public class InfoAgent implements java.io.Serializable {
                 + ")";
     }
 
+    /**
+     * Gets a short information about the type of the agent to show in the map.
+     * @return short string with info about the agent type.
+     */
+    public String getMapMessage() {
+        return type.getShortString();
+    }
 }

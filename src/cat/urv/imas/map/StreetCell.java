@@ -113,14 +113,11 @@ public class StreetCell extends Cell {
             visual.drawEmptyStreet(this);
         } else {
             switch (agent.getType()) {
-                case AMBULANCE:
-                    visual.drawAmbulance(this);
+                case SCOUT:
+                    visual.drawScout(this);
                     break;
-                case FIREMAN:
-                    visual.drawFireman(this);
-                    break;
-                case PRIVATE_VEHICLE:
-                    visual.drawPrivateVehicle(this);
+                case HARVESTER:
+                    visual.drawHarvester(this);
                     break;
                 default:
                 // Do nothing. In fact, we'll never get here.
@@ -134,21 +131,11 @@ public class StreetCell extends Cell {
             return "";
         } else {
             switch (agent.getType()) {
-                case AMBULANCE:
-                    //TODO: You here should append the number of people in the ambulance
-                    int people = 0;
-                    String extraInfo = "";
-                    if (people != 0) {
-                        extraInfo = "<" + people + ">";
-                    }
-                    return "A" + extraInfo;
-                case FIREMAN:
-                    return "F";
-                case PRIVATE_VEHICLE:
-                    return "P";
+                case HARVESTER:
+                    //TODO: You here should append the recycling info.
+                    return agent.getMapMessage();
                 default:
-                    // Do nothing. In fact, we'll never get here.
-                    return "";
+                    return agent.getMapMessage();
             }
         }
     }
