@@ -37,9 +37,8 @@ public class Agents implements java.io.Serializable {
     private int amount;
 
     public Agents() {
-        for(AgentType type: AgentType.values()) {
-            agents.put(type, new LinkedList());
-        }
+        agents.put(AgentType.DIGGER, new LinkedList());
+        agents.put(AgentType.PROSPECTOR, new LinkedList());
         amount = 0;
     }
 
@@ -86,7 +85,7 @@ public class Agents implements java.io.Serializable {
     }
 
     public boolean isEmpty() {
-        return amount != 0;
+        return amount == 0;
     }
 
     public String getMapMessage() {

@@ -36,7 +36,7 @@ public class MapVisualizer extends JPanel implements CellVisualizer {
     /**
      * Light red color.
      */
-    private static final Color LIGHT_RED = new Color(255, 51, 51);
+    private static final Color LIGHT_RED = new Color(255, 102, 102);
     /**
      * City map.
      */

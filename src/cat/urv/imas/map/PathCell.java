@@ -98,7 +98,7 @@ public class PathCell extends Cell {
     /* ***************** Map visualization API ********************************/
     @Override
     public void draw(CellVisualizer visual) {
-        if (agents == null) {
+        if (agents == null || agents.isEmpty()) {
             visual.drawEmptyPath(this);
         } else {
             if (agents.size() == 1) {
