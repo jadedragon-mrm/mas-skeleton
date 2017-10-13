@@ -1,5 +1,5 @@
 /**
- * IMAS base code for the practical work. 
+ * IMAS base code for the practical work.
  * Copyright (C) 2014 DEIM - URV
  *
  * This program is free software: you can redistribute it and/or modify it under
@@ -18,38 +18,45 @@
 package cat.urv.imas.map;
 
 import cat.urv.imas.gui.CellVisualizer;
+import cat.urv.imas.onthology.MetalType;
 
 /**
- * Cell that represents a recycling center.
+ * Cell that represents a manufacturing center.
  */
-public class RecyclingCenterCell extends Cell {
+public class ManufacturingCenterCell extends Cell {
 
     /**
-     * Prices of recycling plastic, glass and paper, respectively.
+     * Price of manufacturing silver or gold.
      */
-    private final int[] prices;
+    private final int price;
+    /**
+     * Type of metal that this center manufactures.
+     */
+    private final MetalType metal;
 
     /**
-     * Initializes a cell with a hospital.
+     * Initializes a cell.
      *
      * @param row row number (zero based).
      * @param col col number (zero based).
-     * @param prices prices of recycling plastic, glass and paper, respectively.
+     * @param price prices of manufacturing silver or gold.
+     * @param type metal type that this center manufactures.
      */
-    public RecyclingCenterCell(int row, int col, int[] prices) {
-        super(CellType.RECYCLING_CENTER, row, col);
-        this.prices = prices;
+    public ManufacturingCenterCell(int row, int col, int price, MetalType type) {
+        super(CellType.MANUFACTURING_CENTER, row, col);
+        this.price = price;
+        this.metal = type;
     }
 
     /* ***************** Map visualization API ********************************/
     @Override
     public void draw(CellVisualizer visual) {
-        visual.drawRecyclingCenter(this);
+        visual.drawManufacturingCenter(this);
     }
-    
+
     @Override
     public String getMapMessage() {
-        return prices[0] + "/" + prices[1] + "/" + prices[2];
+        return price + ":" + metal.getShortString();
     }
-    
+
 }

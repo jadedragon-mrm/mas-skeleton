@@ -1,5 +1,5 @@
 /**
- * IMAS base code for the practical work. 
+ * IMAS base code for the practical work.
  * Copyright (C) 2014 DEIM - URV
  *
  * This program is free software: you can redistribute it and/or modify it under
@@ -17,18 +17,19 @@
  */
 package cat.urv.imas.map;
 
+import cat.urv.imas.agent.AgentType;
 import cat.urv.imas.gui.CellVisualizer;
 import cat.urv.imas.onthology.InfoAgent;
 
 /**
  * This class keeps information about a street cell in the map.
  */
-public class StreetCell extends Cell {
+public class PathCell extends Cell {
 
     /**
      * Information about the agent the cell contains.
      */
-    private InfoAgent agent = null;
+    private Agents agents = new Agents();
 
     /**
      * Builds a cell with a given type.
@@ -36,18 +37,21 @@ public class StreetCell extends Cell {
      * @param row row number.
      * @param col column number.
      */
-    public StreetCell(int row, int col) {
-        super(CellType.STREET, row, col);
+    public PathCell(int row, int col) {
+        super(CellType.PATH, row, col);
     }
 
     /* ********************************************************************** */
     /**
-     * Checks whether this cell contains an agent.
+     * Checks whether this cell contains a digger agent digging up some metal.
      *
-     * @return
+     * @return boolean
      */
-    public boolean isThereAnAgent() {
-        return (agent != null);
+    public boolean isThereADiggerAgentWorking() {
+        // TODO: update condition to fit the restriction of
+        //       allowing just a single digger working or
+        //       any amount of agents moving through.
+        return false;
     }
 
     /**
@@ -57,38 +61,23 @@ public class StreetCell extends Cell {
      * @throws Exception
      */
     public void addAgent(InfoAgent newAgent) throws Exception {
-        System.out.println("Add an agent to " + this + "<--" + newAgent);
-        if (this.isThereAnAgent()) {
+        if (this.isThereADiggerAgentWorking()) {
             throw new Exception("Full STREET cell");
         }
-        if (newAgent == null) {
-            throw new Exception("No valid agent to be set (null)");
-        }
-        // if everything is OK, we add the new agent to the cell
-        this.agent = newAgent;
+        agents.add(newAgent);
     }
 
     public void removeAgent(InfoAgent oldInfoAgent) throws Exception {
-        //System.out.println("Remove an agent to " + this.toString());
-        if (!this.isThereAnAgent()) {
-            throw new Exception("There is no agent in cell");
-        }
-        if (oldInfoAgent != null) {
-            throw new Exception("No valid agent to be remove (null).");
-        } else if (!oldInfoAgent.equals(agent)) {
-            throw new Exception("No matching agent to be remove.");
-        }
-        // if everything is OK, we remove the agent from the cell
-        this.agent = null;
+        agents.remove(oldInfoAgent);
     }
 
     /**
-     * Get the current agent from this cell.
+     * Get the current agents from this cell.
      *
      * @return the current agent from this cell.
      */
-    public InfoAgent getAgent() {
-        return this.agent;
+    public Agents getAgents() {
+        return this.agents;
     }
 
     /* ********************************************************************** */
@@ -99,45 +88,56 @@ public class StreetCell extends Cell {
      */
     @Override
     public String toStringSpecialization() {
-        if (this.isThereAnAgent()) {
-            return "(agent " + agent.toString() + ")";
+        if (this.isThereADiggerAgentWorking()) {
+            return "(agent " + agents.get(AgentType.DIGGER).toString() + ")";
         } else {
-            return "";
+            return agents.toString();
         }
     }
 
     /* ***************** Map visualization API ********************************/
     @Override
     public void draw(CellVisualizer visual) {
-        if (agent == null) {
-            visual.drawEmptyStreet(this);
+        if (agents == null) {
+            visual.drawEmptyPath(this);
         } else {
-            switch (agent.getType()) {
-                case SCOUT:
-                    visual.drawScout(this);
-                    break;
-                case HARVESTER:
-                    visual.drawHarvester(this);
-                    break;
-                default:
-                // Do nothing. In fact, we'll never get here.
+            if (agents.size() == 1) {
+                InfoAgent first;
+                try {
+                    first = agents.getFirst();
+                    switch (first.getType()) {
+                        case PROSPECTOR:
+                            visual.drawProspector(this);
+                            break;
+                        case DIGGER:
+                            visual.drawDigger(this);
+                            break;
+                        default:
+                        // Do nothing. In fact, we'll never get here.
+                    }
+                } catch (Exception e) {
+                    // do nothing: we already checked that an agent exists.
+                }
+            } else {
+                visual.drawAgents(this);
             }
         }
     }
 
     @Override
     public String getMapMessage() {
-        if (agent == null) {
+        if (agents.isEmpty()) {
             return "";
-        } else {
-            switch (agent.getType()) {
-                case HARVESTER:
-                    //TODO: You here should append the recycling info.
-                    return agent.getMapMessage();
-                default:
-                    return agent.getMapMessage();
+        } else if (agents.size() == 1) {
+            InfoAgent first;
+            try {
+                first = agents.getFirst();
+                return first.getMapMessage();
+            } catch (Exception e) {
+                // do nothing: we already checked that an agent exists.
             }
         }
+        return agents.getMapMessage();
     }
 
 }

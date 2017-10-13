@@ -35,11 +35,12 @@ public class GenerateGameSettings {
      */
     public static void defineSettings(InitialGameSettings settings) {
         settings.setSeed(1234567.8f);
-        settings.setRecyclingCenterPrices(new int[][]{
-            {0, 10, 9},
-            {9, 0, 10},
-            {10, 9, 0},
-            {9, 9, 0},
+        settings.setManufacturingCenterPrice(new int[]{8, 9, 6, 7});
+        settings.setManufacturingCenterMetalType(new MetalType[]{
+            MetalType.GOLD,
+            MetalType.SILVER,
+            MetalType.SILVER,
+            MetalType.GOLD
         });
         settings.setSimulationSteps(STEPS);
         settings.setTitle("Practical IMAS");
@@ -47,42 +48,28 @@ public class GenerateGameSettings {
         // settings for first date
         int[][] map
             = {
-                {10, 10, R, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10},
-                {10,  S,  S,  S,  SC,  S,  S,  S,  S,  S,  S,  S,  S,  S,  S,  S,  S,  S,  H,  SC,  S,  S,  S,  S, 10},
-                {10,  S,  H,  S,  S,  S,  S,  S,  S,  S,  S,  S,  S,  S,  S,  S,  S,  S,  S,  S,  S,  S,  S,  S, 10},
-                {10,  S,  S, 10, 10,  S,  S, 10, 10,  S,  S, 10, 10,  S,  S, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10},
-                {10,  S,  S, 10, 10,  S,  S, 10, 10,  S,  S, 10, 10,  S,  S, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10},
-                {10,  S,  S, 10, 10,  S,  S,  S,  S,  S,  S, 10, 10,  S,  S,  S,  S,  S,  S,  S,  S,  S,  S,  S, 10},
-                {10,  S,  S, 10, 10,  S,  S,  S,  S,  S,  S, 10, 10,  S,  S,  S,  S,  S,  S,  S,  S,  S,  S,  S, 10},
-                {10,  S,  S, 10, 10,  S,  S, 10, 10,  S,  S, 10, 10,  S,  S, 10, 10,  S,  S, 10, 10, 10,  S,  S, 10},
-                {10,  S,  S, 10,  R,  S,  H, 10, 10,  S,  S, 10, 10,  H,  S, 10, 10,  S,  S, 10, 10,  S,  S,  S, 10},
-                {10,  S,  S, 10, 10,  S,  S, 10, 10,  S,  S,  R, 10,  S,  S, 10, 10,  S,  H, 10, 10,  S,  S,  S, 10},
-                {10,  S,  S, 10, 10,  S,  S, 10, 10,  S,  S, 10, 10,  S,  S, 10, 10,  S,  S, 10, 10,  S,  S,  S, 10},
-                {10,  S,  S, 10, 10,  S,  S, 10, 10,  S,  S, 10, 10,  S,  S, 10, 10,  S,  S, 10, 10,  SC,  S,  S, 10},
-                {10,  S,  S, 10, 10,  H,  S, 10, 10,  S,  S, 10, 10,  S,  S, 10, 10,  S,  S, 10, 10,  S,  S,  S, 10},
-                {10,  S,  S, 10, 10,  S,  S, 10, 10,  S,  S, 10, 10,  S,  S, 10, 10,  S,  S, 10, 10,  S,  S, 10, 10},
-                {10,  S,  S, 10, 10,  S,  S, 10, 10,  S,  S, 10, 10,  S,  S, 10, 10,  SC,  S, 10, 10,  S,  S,  S, 10},
-                {10,  S,  S, 10, 10,  S,  S, 10, 10,  S,  S, 10, 10,  S,  S, 10, 10,  S,  S, 10, 10,  S,  S,  S, 10},
-                {10,  S,  S, 10, 10,  S,  S, 10, 10,  SC,  S, 10, 10,  S,  S, 10, 10,  S,  S, R, 10,  S,  S,  S, 10},
-                {10,  S,  H,  S,  S,  S,  S, 10, 10,  S,  S,  S,  S,  S,  S, 10, 10,  S,  S, 10, 10,  S,  S,  S, 10},
-                {10,  S,  S,  S,  S,  S,  S, 10, 10,  S,  S,  S,  S,  S,  S, 10, 10,  S,  S, 10, 10,  S,  S,  S, 10},
-                {10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10},};
-        settings.setHarvestersCapacity(6);
-        settings.setSupportedGarbageByHarvesters(new String[][]{
-            {L},
-            {G, P, L},
-            {G},
-            {G, P},
-            {L, P},
-            {G, L},
-            {G, P},
-        });
-        settings.setRecyclingCenterPrices(new int[][]{
-            {9, 10, 0},
-            {10, 0, 9},
-            {0, 9, 10},
-            {2, 8, 6},
-        });
+                {F, F, F, MCC, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F},
+                {F, P, P, P, P, P, P, P, P, P, P, DC, P, P, P, P, P, P, P, F},
+                {F, P, PC, P, P, P, P, DC, P, P, P, P, P, P, P, P, P, P, DC, F},
+                {F, P, P, F, F, F, F, F, F, P, P, F, F, F, F, F, F, F, F, F},
+                {F, P, P, F, F, F, F, F, MCC, P, P, F, F, F, F, F, F, F, F, F},
+                {F, PC, P, F, F, P, P, P, P, P, P, F, F, P, P, P, P, P, P, F},
+                {F, P, P, F, F, P, P, P, P, P, P, F, F, P, P, P, P, P, P, F},
+                {F, P, P, F, F, P, P, F, F, P, P, F, F, P, P, F, F, P, P, F},
+                {F, P, P, F, F, P, DC, F, F, P, P, F, F, P, P, F, F, P, P, F},
+                {F, P, P, F, F, P, P, F, F, P, P, F, F, P, P, F, F, P, P, F},
+                {F, P, P, F, F, P, P, F, F, P, P, F, F, P, P, F, F, P, P, F},
+                {F, P, P, F, F, P, P, F, F, P, PC, F, F, P, P, F, F, P, P, F},
+                {F, P, P, F, F, P, P, F, F, P, P, F, F, P, P, MCC, F, P, P, F},
+                {F, P, P, F, F, P, P, F, F, P, P, F, F, P, P, F, F, DC, P, F},
+                {F, P, P, F, F, P, P, F, F, P, P, F, F, P, P, F, F, DC, P, F},
+                {F, P, P, F, F, P, P, F, F, P, P, F, F, P, P, F, F, P, P, F},
+                {F, P, P, MCC, F, P, P, F, F, P, P, F, F, P, P, F, F, P, P, F},
+                {F, P, PC, P, DC, P, P, F, F, P, P, P, P, P, P, F, F, P, P, F},
+                {F, P, P, P, P, P, P, F, F, P, P, P, P, P, P, F, F, DC, P, F},
+                {F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F},
+            };
+        settings.setDiggersCapacity(6);
         settings.setInitialMap(map);
     }
 
@@ -116,11 +103,11 @@ public class GenerateGameSettings {
             JAXBElement<InitialGameSettings> jaxbElement = new JAXBElement(
                     new QName(InitialGameSettings.class.getSimpleName()), InitialGameSettings.class, settings);
 
-            //Create a String writer object which will be 
+            //Create a String writer object which will be
             //used to write jaxbElment XML to string
             StringWriter writer = new StringWriter();
 
-            // create JAXBContext which will be used to update writer 		
+            // create JAXBContext which will be used to update writer
             JAXBContext context = JAXBContext.newInstance(InitialGameSettings.class);
 
             // marshall or convert jaxbElement containing GameSettings to xml format

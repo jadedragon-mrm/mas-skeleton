@@ -1,5 +1,5 @@
 /**
- * IMAS base code for the practical work. 
+ * IMAS base code for the practical work.
  * Copyright (C) 2014 DEIM - URV
  *
  * This program is free software: you can redistribute it and/or modify it under
@@ -28,12 +28,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 /**
  * Current game settings. Cell coordinates are zero based: row and column values
  * goes from [0..n-1], both included.
- * 
+ *
  * Use the GenerateGameSettings to build the game.settings configuration file.
- * 
+ *
  */
 @XmlRootElement(name = "GameSettings")
-public class GameSettings implements java.io.Serializable {    
+public class GameSettings implements java.io.Serializable {
 
     /* Default values set to all attributes, just in case. */
     /**
@@ -41,17 +41,21 @@ public class GameSettings implements java.io.Serializable {
      */
     private float seed = 0.0f;
     /**
-     * Price for recycling on recycling centers, for plastic, glass and paper. 
-     * Therefore, a value "{{1, 2, 3}}" means there will be a single recycling
-     * center and it will pay 1 coin for plastic, 2 coins for glass and
-     * 3 coins for paper. If there is a 0 coin at some point, it means
-     * there is no recycling process for that kind of garbage.
+     * Metal price for each manufacturing center. They appear inthe same order
+     * than they appear in the map.
      */
-    private int[][] recyclingCenterPrices = {
-        {9, 10, 0},
-        {10, 0, 9},
-        {0, 9, 10},
+    protected int[] manufacturingCenterPrice = {8, 9, 6, 7};
+    /**
+     * Metal type for each manufacturing center. They appear inthe same order
+     * than they appear in the map.
+     */
+    protected MetalType[] manufacturingCenterMetalType = {
+        MetalType.GOLD,
+        MetalType.SILVER,
+        MetalType.SILVER,
+        MetalType.GOLD
     };
+
     /**
      * Total number of simulation steps.
      */
@@ -62,28 +66,23 @@ public class GameSettings implements java.io.Serializable {
     protected Cell[][] map;
     /**
      * From 0 to 100 (meaning percentage) of probability of having new
-     * garbage in the city at every step.
+     * metal in the city at every step.
      */
-    protected int newGarbageProbability = 10;
+    protected int newMetalProbability = 10;
     /**
-     * If there is new garbage in a certain simulation step, this number
-     * represents the maximum number of buildings affected by garbage.
+     * If there is new metal in a certain simulation step, this number
+     * represents the maximum number of fields with new metal.
      */
-    protected int maxNumberBuildingWithNewGargabe = 5;
+    protected int maxNumberFieldsWithNewMetal = 5;
     /**
-     * For each building with new garbage, this number represents the maximum
-     * amount of new garbage that can appear.
+     * For each field with new metal, this number represents the maximum
+     * amount of new metal that can appear.
      */
-    protected int maxAmountOfNewGargabe = 5;
+    protected int maxAmountOfNewMetal = 5;
     /**
      * All harvesters will have this capacity of garbage units.
      */
-    protected int harvestersCapacity = 6;
-    /**
-     * In order of appearance of the harvesters, this is the list of garbage
-     * types suported by each harvester.
-     */
-    protected GarbageType[][] allowedGarbageTypePerHarvester;
+    protected int diggersCapacity = 6;
     /**
      * Computed summary of the position of agents in the city. For each given
      * type of mobile agent, we get the list of their positions.
@@ -92,8 +91,8 @@ public class GameSettings implements java.io.Serializable {
     /**
      * Title to set to the GUI.
      */
-    protected String title = "Demo title";
-    
+    protected String title = "Default game settings";
+
 
     public float getSeed() {
         return seed;
@@ -104,24 +103,22 @@ public class GameSettings implements java.io.Serializable {
         this.seed = seed;
     }
 
-    public int[][] getRecyclingCenterPrices() {
-        return recyclingCenterPrices;
+    public int[] getManufacturingCenterPrice() {
+        return manufacturingCenterPrice;
     }
 
     @XmlElement(required = true)
-    public void setRecyclingCenterPrices(int[][] prices) {
-        this.recyclingCenterPrices = prices;
-        int check = 0; // if 7, all garbage types are treated.
-        for (int i=0; i < prices.length; i++) {
-            for (int j=0; j < 3; j++) {
-                if (prices[i][j] != 0) {
-                    check |= 1 << j;
-                }
-            }
-        }
-        if (check != 7) {
-            throw new Error(getClass().getCanonicalName() + " : Not all garbage types are treated in this map.");
-        }
+    public void setManufacturingCenterPrice(int[] prices) {
+        this.manufacturingCenterPrice = prices;
+    }
+
+    public MetalType[] getManufacturingCenterMetalType() {
+        return manufacturingCenterMetalType;
+    }
+
+    @XmlElement(required = true)
+    public void setManufacturingCenterMetalType(MetalType[] types) {
+        this.manufacturingCenterMetalType = types;
     }
 
     public int getSimulationSteps() {
@@ -141,48 +138,43 @@ public class GameSettings implements java.io.Serializable {
     public void setTitle(String title) {
         this.title = title;
     }
-    
-    public int getNewGarbageProbability() {
-        return newGarbageProbability;
+
+    public int getNewMetalProbability() {
+        return newMetalProbability;
     }
 
     @XmlElement(required=true)
-    public void setNewGarbageProbability(int newGarbageProbability) {
-        this.newGarbageProbability = newGarbageProbability;
+    public void setNewMetalProbability(int newMetalProbability) {
+        this.newMetalProbability = newMetalProbability;
     }
 
-    public int getMaxNumberBuildingWithNewGargabe() {
-        return maxNumberBuildingWithNewGargabe;
-    }
-
-    @XmlElement(required=true)
-    public void setMaxNumberBuildingWithNewGargabe(int maxNumberBuildingWithNewGargabe) {
-        this.maxNumberBuildingWithNewGargabe = maxNumberBuildingWithNewGargabe;
-    }
-
-    public int getMaxAmountOfNewGargabe() {
-        return maxAmountOfNewGargabe;
+    public int getMaxNumberFieldsWithNewMetal() {
+        return maxNumberFieldsWithNewMetal;
     }
 
     @XmlElement(required=true)
-    public void setMaxAmountOfNewGargabe(int maxAmountOfNewGargabe) {
-        this.maxAmountOfNewGargabe = maxAmountOfNewGargabe;
+    public void setMaxNumberFieldsWithNewMetal(int maxNumberFieldsWithNewMetal) {
+        this.maxNumberFieldsWithNewMetal = maxNumberFieldsWithNewMetal;
     }
 
-    @XmlTransient
-    public GarbageType[][] getAllowedGarbageTypePerHarvester() {
-        return allowedGarbageTypePerHarvester;
-    }
-
-    public int getHarvestersCapacity() {
-        return harvestersCapacity;
+    public int getMaxAmountOfNewMetal() {
+        return maxAmountOfNewMetal;
     }
 
     @XmlElement(required=true)
-    public void setHarvestersCapacity(int harvestersCapacity) {
-        this.harvestersCapacity = harvestersCapacity;
+    public void setMaxAmountOfNewMetal(int maxAmountOfNewMetal) {
+        this.maxAmountOfNewMetal = maxAmountOfNewMetal;
     }
-    
+
+    public int getDiggersCapacity() {
+        return diggersCapacity;
+    }
+
+    @XmlElement(required=true)
+    public void setDiggersCapacity(int diggersCapacity) {
+        this.diggersCapacity = diggersCapacity;
+    }
+
     /**
      * Gets the full current city map.
      * @return the current city map.
@@ -191,14 +183,14 @@ public class GameSettings implements java.io.Serializable {
     public Cell[][] getMap() {
         return map;
     }
-    
-    public Cell[] detectBuildingsWithGarbage(int row, int col) {
+
+    public Cell[] detectFieldsWithMetal(int row, int col) {
         //TODO: find all surrounding cells to (row,col) that are
         //      buildings and have garbage on it.
-        //      Use: BuildingCell.detectGarbage() to do so.
+        //      Use: FieldCell.detectMetal() to do so.
         return null;
     }
-    
+
     /**
      * Gets the cell given its coordinate.
      * @param row row number (zero based)
@@ -217,15 +209,15 @@ public class GameSettings implements java.io.Serializable {
     public void setAgentList(Map<AgentType, List<Cell>> agentList) {
         this.agentList = agentList;
     }
-    
+
     public String toString() {
         //TODO: show a human readable summary of the game settings.
         return "Game settings";
     }
-    
+
     public String getShortString() {
         //TODO: list of agents
         return "Game settings: agent related string";
     }
-    
+
 }

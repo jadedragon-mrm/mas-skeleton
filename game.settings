@@ -1,68 +1,44 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <InitialGameSettings>
-    <harvestersCapacity>6</harvestersCapacity>
-    <maxAmountOfNewGargabe>5</maxAmountOfNewGargabe>
-    <maxNumberBuildingWithNewGargabe>5</maxNumberBuildingWithNewGargabe>
-    <newGarbageProbability>10</newGarbageProbability>
-    <recyclingCenterPrices>
-        <item>9</item>
-        <item>10</item>
-        <item>0</item>
-    </recyclingCenterPrices>
-    <recyclingCenterPrices>
-        <item>10</item>
-        <item>0</item>
-        <item>9</item>
-    </recyclingCenterPrices>
-    <recyclingCenterPrices>
-        <item>0</item>
-        <item>9</item>
-        <item>10</item>
-    </recyclingCenterPrices>
-    <recyclingCenterPrices>
-        <item>2</item>
-        <item>8</item>
-        <item>6</item>
-    </recyclingCenterPrices>
+    <diggersCapacity>6</diggersCapacity>
+    <manufacturingCenterMetalType>GOLD</manufacturingCenterMetalType>
+    <manufacturingCenterMetalType>SILVER</manufacturingCenterMetalType>
+    <manufacturingCenterMetalType>SILVER</manufacturingCenterMetalType>
+    <manufacturingCenterMetalType>GOLD</manufacturingCenterMetalType>
+    <manufacturingCenterPrice>8</manufacturingCenterPrice>
+    <manufacturingCenterPrice>9</manufacturingCenterPrice>
+    <manufacturingCenterPrice>6</manufacturingCenterPrice>
+    <manufacturingCenterPrice>7</manufacturingCenterPrice>
+    <maxAmountOfNewMetal>5</maxAmountOfNewMetal>
+    <maxNumberFieldsWithNewMetal>5</maxNumberFieldsWithNewMetal>
+    <newMetalProbability>10</newMetalProbability>
     <seed>1234567.8</seed>
     <simulationSteps>600</simulationSteps>
     <title>Practical IMAS</title>
     <initialMap>
-        <item>10</item>
-        <item>10</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
         <item>-3</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
     </initialMap>
     <initialMap>
-        <item>10</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>-2</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
+        <item>-4</item>
         <item>0</item>
         <item>0</item>
         <item>0</item>
@@ -74,15 +50,22 @@
         <item>0</item>
         <item>0</item>
         <item>-1</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>-4</item>
+    </initialMap>
+    <initialMap>
+        <item>-4</item>
+        <item>0</item>
         <item>-2</item>
         <item>0</item>
         <item>0</item>
         <item>0</item>
-        <item>0</item>
-        <item>10</item>
-    </initialMap>
-    <initialMap>
-        <item>10</item>
         <item>0</item>
         <item>-1</item>
         <item>0</item>
@@ -95,504 +78,382 @@
         <item>0</item>
         <item>0</item>
         <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>10</item>
+        <item>-1</item>
+        <item>-4</item>
     </initialMap>
     <initialMap>
-        <item>10</item>
+        <item>-4</item>
         <item>0</item>
         <item>0</item>
-        <item>10</item>
-        <item>10</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
         <item>0</item>
         <item>0</item>
-        <item>10</item>
-        <item>10</item>
-        <item>0</item>
-        <item>0</item>
-        <item>10</item>
-        <item>10</item>
-        <item>0</item>
-        <item>0</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
     </initialMap>
     <initialMap>
-        <item>10</item>
+        <item>-4</item>
         <item>0</item>
         <item>0</item>
-        <item>10</item>
-        <item>10</item>
-        <item>0</item>
-        <item>0</item>
-        <item>10</item>
-        <item>10</item>
-        <item>0</item>
-        <item>0</item>
-        <item>10</item>
-        <item>10</item>
-        <item>0</item>
-        <item>0</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-    </initialMap>
-    <initialMap>
-        <item>10</item>
-        <item>0</item>
-        <item>0</item>
-        <item>10</item>
-        <item>10</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>10</item>
-        <item>10</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>10</item>
-    </initialMap>
-    <initialMap>
-        <item>10</item>
-        <item>0</item>
-        <item>0</item>
-        <item>10</item>
-        <item>10</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>10</item>
-        <item>10</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>10</item>
-    </initialMap>
-    <initialMap>
-        <item>10</item>
-        <item>0</item>
-        <item>0</item>
-        <item>10</item>
-        <item>10</item>
-        <item>0</item>
-        <item>0</item>
-        <item>10</item>
-        <item>10</item>
-        <item>0</item>
-        <item>0</item>
-        <item>10</item>
-        <item>10</item>
-        <item>0</item>
-        <item>0</item>
-        <item>10</item>
-        <item>10</item>
-        <item>0</item>
-        <item>0</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>0</item>
-        <item>0</item>
-        <item>10</item>
-    </initialMap>
-    <initialMap>
-        <item>10</item>
-        <item>0</item>
-        <item>0</item>
-        <item>10</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
         <item>-3</item>
         <item>0</item>
-        <item>-1</item>
-        <item>10</item>
-        <item>10</item>
         <item>0</item>
-        <item>0</item>
-        <item>10</item>
-        <item>10</item>
-        <item>-1</item>
-        <item>0</item>
-        <item>10</item>
-        <item>10</item>
-        <item>0</item>
-        <item>0</item>
-        <item>10</item>
-        <item>10</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>10</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
     </initialMap>
     <initialMap>
-        <item>10</item>
-        <item>0</item>
-        <item>0</item>
-        <item>10</item>
-        <item>10</item>
-        <item>0</item>
-        <item>0</item>
-        <item>10</item>
-        <item>10</item>
-        <item>0</item>
-        <item>0</item>
-        <item>-3</item>
-        <item>10</item>
-        <item>0</item>
-        <item>0</item>
-        <item>10</item>
-        <item>10</item>
-        <item>0</item>
-        <item>-1</item>
-        <item>10</item>
-        <item>10</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>10</item>
-    </initialMap>
-    <initialMap>
-        <item>10</item>
-        <item>0</item>
-        <item>0</item>
-        <item>10</item>
-        <item>10</item>
-        <item>0</item>
-        <item>0</item>
-        <item>10</item>
-        <item>10</item>
-        <item>0</item>
-        <item>0</item>
-        <item>10</item>
-        <item>10</item>
-        <item>0</item>
-        <item>0</item>
-        <item>10</item>
-        <item>10</item>
-        <item>0</item>
-        <item>0</item>
-        <item>10</item>
-        <item>10</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>10</item>
-    </initialMap>
-    <initialMap>
-        <item>10</item>
-        <item>0</item>
-        <item>0</item>
-        <item>10</item>
-        <item>10</item>
-        <item>0</item>
-        <item>0</item>
-        <item>10</item>
-        <item>10</item>
-        <item>0</item>
-        <item>0</item>
-        <item>10</item>
-        <item>10</item>
-        <item>0</item>
-        <item>0</item>
-        <item>10</item>
-        <item>10</item>
-        <item>0</item>
-        <item>0</item>
-        <item>10</item>
-        <item>10</item>
+        <item>-4</item>
         <item>-2</item>
         <item>0</item>
+        <item>-4</item>
+        <item>-4</item>
         <item>0</item>
-        <item>10</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>-4</item>
     </initialMap>
     <initialMap>
-        <item>10</item>
+        <item>-4</item>
         <item>0</item>
         <item>0</item>
-        <item>10</item>
-        <item>10</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>-4</item>
+    </initialMap>
+    <initialMap>
+        <item>-4</item>
+        <item>0</item>
+        <item>0</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>0</item>
+        <item>0</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>0</item>
+        <item>0</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>0</item>
+        <item>0</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>0</item>
+        <item>0</item>
+        <item>-4</item>
+    </initialMap>
+    <initialMap>
+        <item>-4</item>
+        <item>0</item>
+        <item>0</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>0</item>
         <item>-1</item>
-        <item>0</item>
-        <item>10</item>
-        <item>10</item>
-        <item>0</item>
-        <item>0</item>
-        <item>10</item>
-        <item>10</item>
+        <item>-4</item>
+        <item>-4</item>
         <item>0</item>
         <item>0</item>
-        <item>10</item>
-        <item>10</item>
+        <item>-4</item>
+        <item>-4</item>
         <item>0</item>
         <item>0</item>
-        <item>10</item>
-        <item>10</item>
+        <item>-4</item>
+        <item>-4</item>
         <item>0</item>
         <item>0</item>
-        <item>0</item>
-        <item>10</item>
+        <item>-4</item>
     </initialMap>
     <initialMap>
-        <item>10</item>
+        <item>-4</item>
         <item>0</item>
         <item>0</item>
-        <item>10</item>
-        <item>10</item>
+        <item>-4</item>
+        <item>-4</item>
         <item>0</item>
         <item>0</item>
-        <item>10</item>
-        <item>10</item>
+        <item>-4</item>
+        <item>-4</item>
         <item>0</item>
         <item>0</item>
-        <item>10</item>
-        <item>10</item>
+        <item>-4</item>
+        <item>-4</item>
         <item>0</item>
         <item>0</item>
-        <item>10</item>
-        <item>10</item>
+        <item>-4</item>
+        <item>-4</item>
         <item>0</item>
         <item>0</item>
-        <item>10</item>
-        <item>10</item>
-        <item>0</item>
-        <item>0</item>
-        <item>10</item>
-        <item>10</item>
+        <item>-4</item>
     </initialMap>
     <initialMap>
-        <item>10</item>
+        <item>-4</item>
         <item>0</item>
         <item>0</item>
-        <item>10</item>
-        <item>10</item>
+        <item>-4</item>
+        <item>-4</item>
         <item>0</item>
         <item>0</item>
-        <item>10</item>
-        <item>10</item>
+        <item>-4</item>
+        <item>-4</item>
         <item>0</item>
         <item>0</item>
-        <item>10</item>
-        <item>10</item>
+        <item>-4</item>
+        <item>-4</item>
         <item>0</item>
         <item>0</item>
-        <item>10</item>
-        <item>10</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>0</item>
+        <item>0</item>
+        <item>-4</item>
+    </initialMap>
+    <initialMap>
+        <item>-4</item>
+        <item>0</item>
+        <item>0</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>0</item>
+        <item>0</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>0</item>
         <item>-2</item>
-        <item>0</item>
-        <item>10</item>
-        <item>10</item>
-        <item>0</item>
+        <item>-4</item>
+        <item>-4</item>
         <item>0</item>
         <item>0</item>
-        <item>10</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>0</item>
+        <item>0</item>
+        <item>-4</item>
     </initialMap>
     <initialMap>
-        <item>10</item>
+        <item>-4</item>
         <item>0</item>
         <item>0</item>
-        <item>10</item>
-        <item>10</item>
+        <item>-4</item>
+        <item>-4</item>
         <item>0</item>
         <item>0</item>
-        <item>10</item>
-        <item>10</item>
+        <item>-4</item>
+        <item>-4</item>
         <item>0</item>
         <item>0</item>
-        <item>10</item>
-        <item>10</item>
-        <item>0</item>
-        <item>0</item>
-        <item>10</item>
-        <item>10</item>
-        <item>0</item>
-        <item>0</item>
-        <item>10</item>
-        <item>10</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>10</item>
-    </initialMap>
-    <initialMap>
-        <item>10</item>
-        <item>0</item>
-        <item>0</item>
-        <item>10</item>
-        <item>10</item>
-        <item>0</item>
-        <item>0</item>
-        <item>10</item>
-        <item>10</item>
-        <item>-2</item>
-        <item>0</item>
-        <item>10</item>
-        <item>10</item>
-        <item>0</item>
-        <item>0</item>
-        <item>10</item>
-        <item>10</item>
+        <item>-4</item>
+        <item>-4</item>
         <item>0</item>
         <item>0</item>
         <item>-3</item>
-        <item>10</item>
+        <item>-4</item>
         <item>0</item>
         <item>0</item>
-        <item>0</item>
-        <item>10</item>
+        <item>-4</item>
     </initialMap>
     <initialMap>
-        <item>10</item>
+        <item>-4</item>
+        <item>0</item>
+        <item>0</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>0</item>
+        <item>0</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>0</item>
+        <item>0</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>0</item>
+        <item>0</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-1</item>
+        <item>0</item>
+        <item>-4</item>
+    </initialMap>
+    <initialMap>
+        <item>-4</item>
+        <item>0</item>
+        <item>0</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>0</item>
+        <item>0</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>0</item>
+        <item>0</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>0</item>
+        <item>0</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-1</item>
+        <item>0</item>
+        <item>-4</item>
+    </initialMap>
+    <initialMap>
+        <item>-4</item>
+        <item>0</item>
+        <item>0</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>0</item>
+        <item>0</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>0</item>
+        <item>0</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>0</item>
+        <item>0</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>0</item>
+        <item>0</item>
+        <item>-4</item>
+    </initialMap>
+    <initialMap>
+        <item>-4</item>
+        <item>0</item>
+        <item>0</item>
+        <item>-3</item>
+        <item>-4</item>
+        <item>0</item>
+        <item>0</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>0</item>
+        <item>0</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>0</item>
+        <item>0</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>0</item>
+        <item>0</item>
+        <item>-4</item>
+    </initialMap>
+    <initialMap>
+        <item>-4</item>
+        <item>0</item>
+        <item>-2</item>
         <item>0</item>
         <item>-1</item>
         <item>0</item>
         <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>10</item>
-        <item>10</item>
+        <item>-4</item>
+        <item>-4</item>
         <item>0</item>
         <item>0</item>
         <item>0</item>
         <item>0</item>
         <item>0</item>
         <item>0</item>
-        <item>10</item>
-        <item>10</item>
+        <item>-4</item>
+        <item>-4</item>
         <item>0</item>
         <item>0</item>
-        <item>10</item>
-        <item>10</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>10</item>
+        <item>-4</item>
     </initialMap>
     <initialMap>
-        <item>10</item>
+        <item>-4</item>
         <item>0</item>
         <item>0</item>
         <item>0</item>
         <item>0</item>
         <item>0</item>
         <item>0</item>
-        <item>10</item>
-        <item>10</item>
+        <item>-4</item>
+        <item>-4</item>
         <item>0</item>
         <item>0</item>
         <item>0</item>
         <item>0</item>
         <item>0</item>
         <item>0</item>
-        <item>10</item>
-        <item>10</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-1</item>
         <item>0</item>
-        <item>0</item>
-        <item>10</item>
-        <item>10</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>10</item>
+        <item>-4</item>
     </initialMap>
     <initialMap>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
-        <item>10</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
+        <item>-4</item>
     </initialMap>
-    <supportedGarbageByHarvesters>
-        <item>L</item>
-    </supportedGarbageByHarvesters>
-    <supportedGarbageByHarvesters>
-        <item>G</item>
-        <item>P</item>
-        <item>L</item>
-    </supportedGarbageByHarvesters>
-    <supportedGarbageByHarvesters>
-        <item>G</item>
-    </supportedGarbageByHarvesters>
-    <supportedGarbageByHarvesters>
-        <item>G</item>
-        <item>P</item>
-    </supportedGarbageByHarvesters>
-    <supportedGarbageByHarvesters>
-        <item>L</item>
-        <item>P</item>
-    </supportedGarbageByHarvesters>
-    <supportedGarbageByHarvesters>
-        <item>G</item>
-        <item>L</item>
-    </supportedGarbageByHarvesters>
-    <supportedGarbageByHarvesters>
-        <item>G</item>
-        <item>P</item>
-    </supportedGarbageByHarvesters>
 </InitialGameSettings>
 

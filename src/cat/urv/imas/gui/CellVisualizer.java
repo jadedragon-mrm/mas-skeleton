@@ -24,16 +24,18 @@ import cat.urv.imas.map.*;
  * Enabling draw each kind of cell.
  */
 public interface CellVisualizer {
-    
+
     public void updateGraphics(Graphics2D graphics);
 
-    public void drawScout(StreetCell cell);
+    public void drawProspector(PathCell cell);
 
-    public void drawHarvester(StreetCell cell);
+    public void drawDigger(PathCell cell);
 
-    public void drawRecyclingCenter(RecyclingCenterCell cell);
+    public void drawManufacturingCenter(ManufacturingCenterCell cell);
 
-    public void drawEmptyStreet(StreetCell cell);
+    public void drawEmptyPath(PathCell cell);
 
-    public void drawBuilding(BuildingCell cell);
+    public void drawField(FieldCell cell);
+
+    public void drawAgents(PathCell aThis);
 }

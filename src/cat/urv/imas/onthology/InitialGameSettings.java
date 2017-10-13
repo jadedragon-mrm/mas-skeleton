@@ -1,5 +1,5 @@
 /**
- * IMAS base code for the practical work. 
+ * IMAS base code for the practical work.
  * Copyright (C) 2014 DEIM - URV
  *
  * This program is free software: you can redistribute it and/or modify it under
@@ -19,9 +19,6 @@ package cat.urv.imas.onthology;
 
 import cat.urv.imas.agent.AgentType;
 import cat.urv.imas.map.*;
-import static cat.urv.imas.onthology.GarbageType.GLASS;
-import static cat.urv.imas.onthology.GarbageType.PAPER;
-import static cat.urv.imas.onthology.GarbageType.PLASTIC;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,36 +30,32 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Initial game settings and automatic loading from file.
- * 
+ *
  * Use the GenerateGameSettings to build the game.settings configuration file.
  */
 @XmlRootElement(name = "InitialGameSettings")
 public class InitialGameSettings extends GameSettings {
-    
-    /*
-     * Constants that define the type of content into the initialMap.
-     * Any other value in a cell means that a cell is a building and
-     * the value is the number of people in it.
-     * 
-     * Cells with mobile vehicles are street cells after vehicles 
-     * move around.
-     */
+
     /**
-     * Street cell.
+     * Path cell.
      */
-    public static final int S = 0;
+    public static final int P = 0;
     /**
-     * Harvester cell.
+     * Digger cell.
      */
-    public static final int H = -1;
+    public static final int DC = -1;
     /**
-     * Scout cell.
+     * Prospector cell.
      */
-    public static final int SC = -2;
+    public static final int PC = -2;
     /**
-     * Recycling center cell.
+     * Manufacturing center cell.
      */
-    public static final int R = -3;
+    public static final int MCC = -3;
+    /**
+     * Field cell.
+     */
+    public static final int F = -4;
 
     /**
      * City initialMap. Each number is a cell. The type of each is expressed by a
@@ -71,51 +64,29 @@ public class InitialGameSettings extends GameSettings {
      */
     private int[][] initialMap
             = {
-                {10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10},
-                {10, S, S, S, S, S, S, S, S, S, S, H, S, S, S, S, S, S, S, 10},
-                {10, S, SC, S, S, S, S, H, S, S, S, S, S, S, S, S, S, S, H, 10},
-                {10, S, S, 10, 10, 10, 10, 10, 10, S, S, 10, 10, 10, 10, 10, 10, 10, 10, 10},
-                {10, S, S, 10, 10, 10, 10, 10, R, S, S, 10, 10, 10, 10, 10, 10, 10, 10, 10},
-                {10, SC, S, 10, 10, S, S, S, S, S, S, 10, 10, S, S, S, S, S, S, 10},
-                {10, S, S, 10, 10, S, S, S, S, S, S, 10, 10, S, S, S, S, S, S, 10},
-                {10, S, S, 10, 10, S, S, 10, 10, S, S, 10, 10, S, S, 10, 10, S, S, 10},
-                {10, S, S, 10, 10, S, H, 10, 10, S, S, 10, 10, S, S, 10, 10, S, S, 10},
-                {10, S, S, 10, 10, S, S, 10, 10, S, S, 10, 10, S, S, 10, 10, S, S, 10},
-                {10, S, S, 10, 10, S, S, 10, 10, S, S, 10, 10, S, S, 10, 10, S, S, 10},
-                {10, S, S, 10, 10, S, S, 10, 10, S, SC, 10, 10, S, S, 10, 10, S, S, 10},
-                {10, S, S, 10, 10, S, S, 10, 10, S, S, 10, 10, S, S, R, 10, S, S, 10},
-                {10, S, S, 10, 10, S, S, 10, 10, S, S, 10, 10, S, S, 10, 10, H, S, 10},
-                {10, S, S, 10, 10, S, S, 10, 10, S, S, 10, 10, S, S, 10, 10, H, S, 10},
-                {10, S, S, 10, 10, S, S, 10, 10, S, S, 10, 10, S, S, 10, 10, S, S, 10},
-                {10, S, S, R, 10, S, S, 10, 10, S, S, 10, 10, S, S, 10, 10, S, S, 10},
-                {10, S, SC, S, H, S, S, 10, 10, S, S, S, S, S, S, 10, 10, S, S, 10},
-                {10, S, S, S, S, S, S, 10, 10, S, S, S, S, S, S, 10, 10, H, S, 10},
-                {10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10},};
+                {F, F, F, MCC, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F},
+                {F, P, P, P, P, P, P, P, P, P, P, DC, P, P, P, P, P, P, P, F},
+                {F, P, PC, P, P, P, P, DC, P, P, P, P, P, P, P, P, P, P, DC, F},
+                {F, P, P, F, F, F, F, F, F, P, P, F, F, F, F, F, F, F, F, F},
+                {F, P, P, F, F, F, F, F, MCC, P, P, F, F, F, F, F, F, F, F, F},
+                {F, PC, P, F, F, P, P, P, P, P, P, F, F, P, P, P, P, P, P, F},
+                {F, P, P, F, F, P, P, P, P, P, P, F, F, P, P, P, P, P, P, F},
+                {F, P, P, F, F, P, P, F, F, P, P, F, F, P, P, F, F, P, P, F},
+                {F, P, P, F, F, P, DC, F, F, P, P, F, F, P, P, F, F, P, P, F},
+                {F, P, P, F, F, P, P, F, F, P, P, F, F, P, P, F, F, P, P, F},
+                {F, P, P, F, F, P, P, F, F, P, P, F, F, P, P, F, F, P, P, F},
+                {F, P, P, F, F, P, P, F, F, P, PC, F, F, P, P, F, F, P, P, F},
+                {F, P, P, F, F, P, P, F, F, P, P, F, F, P, P, MCC, F, P, P, F},
+                {F, P, P, F, F, P, P, F, F, P, P, F, F, P, P, F, F, DC, P, F},
+                {F, P, P, F, F, P, P, F, F, P, P, F, F, P, P, F, F, DC, P, F},
+                {F, P, P, F, F, P, P, F, F, P, P, F, F, P, P, F, F, P, P, F},
+                {F, P, P, MCC, F, P, P, F, F, P, P, F, F, P, P, F, F, P, P, F},
+                {F, P, PC, P, DC, P, P, F, F, P, P, P, P, P, P, F, F, P, P, F},
+                {F, P, P, P, P, P, P, F, F, P, P, P, P, P, P, F, F, DC, P, F},
+                {F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F},
+            };
 
-    /**
-     * Plastic short string.
-     */
-    public static final String L = PLASTIC.getShortString();
-    /**
-     * Paper short string.
-     */
-    public static final String P = PAPER.getShortString();
-    /**
-     * Glass short string.
-     */
-    public static final String G = GLASS.getShortString();
-    
-    private String[][] supportedGarbageByHarvesters = {
-        {L},
-        {P},
-        {G},
-        {G, P},
-        {L, P},
-        {G, L},
-        {G, P},
-        {G, P, L},
-    };
-    
+
     public int[][] getInitialMap() {
         return initialMap;
     }
@@ -125,30 +96,12 @@ public class InitialGameSettings extends GameSettings {
         this.initialMap = initialMap;
     }
 
-    public String[][] getSupportedGarbageByHarvesters() {
-        return supportedGarbageByHarvesters;
-    }
-
-    @XmlElement(required = true)
-    public void setSupportedGarbageByHarvesters(String[][] supportedGarbageByHarvesters) {
-        this.supportedGarbageByHarvesters = supportedGarbageByHarvesters;
-        int rows = supportedGarbageByHarvesters.length;
-        this.allowedGarbageTypePerHarvester = new GarbageType[rows][];
-        for (int i=0; i < rows; i++) {
-            int cols = supportedGarbageByHarvesters[i].length;
-            this.allowedGarbageTypePerHarvester[i] = new GarbageType[cols];
-            for (int j=0; j < cols; j++) {
-                this.allowedGarbageTypePerHarvester[i][j] = GarbageType.fromShortString(supportedGarbageByHarvesters[i][j]);
-            }
-        }
-    }
-
     public static final GameSettings load(String filename) {
         if (filename == null) {
             filename = "game.settings";
         }
         try {
-            // create JAXBContext which will be used to update writer 		
+            // create JAXBContext which will be used to update writer
             JAXBContext context = JAXBContext.newInstance(InitialGameSettings.class);
             Unmarshaller u = context.createUnmarshaller();
             InitialGameSettings starter = (InitialGameSettings) u.unmarshal(new FileReader(filename));
@@ -169,62 +122,60 @@ public class InitialGameSettings extends GameSettings {
         int rows = this.initialMap.length;
         int cols = this.initialMap[0].length;
         map = new Cell[rows][cols];
-        int recyclingCenterIndex = 0;
-        int allowedGarbageTypeIndex = 0;
-        int[] recyclingCenterPrice;
-        int[][] recyclingCenterPrices = this.getRecyclingCenterPrices();
+        int manufacturingCenterIndex = 0;
         this.agentList = new HashMap();
-        
+
         int cell;
-        StreetCell c;
+        PathCell c;
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
                 cell = initialMap[row][col];
                 switch (cell) {
-                    case H: 
-                        c = new StreetCell(row, col);
-                        if (allowedGarbageTypeIndex >= allowedGarbageTypePerHarvester.length) {
-                            throw new Error(getClass().getCanonicalName() + " : There are more harvesters than settings for them.");
-                        }
-                        c.addAgent(new HarvesterInfoAgent(AgentType.HARVESTER, allowedGarbageTypePerHarvester[allowedGarbageTypeIndex++], this.getHarvestersCapacity()));
+                    case DC:
+                        c = new PathCell(row, col);
+                        c.addAgent(new DiggerInfoAgent(AgentType.DIGGER, this.getDiggersCapacity()));
                         map[row][col] = c;
-                        addAgentToList(AgentType.HARVESTER, c);
+                        addAgentToList(AgentType.DIGGER, c);
                         break;
-                    case SC:
-                        c = new StreetCell(row, col);
-                        c.addAgent(new InfoAgent(AgentType.SCOUT));
+                    case PC:
+                        c = new PathCell(row, col);
+                        c.addAgent(new InfoAgent(AgentType.PROSPECTOR));
                         map[row][col] = c;
-                        addAgentToList(AgentType.SCOUT, c);
+                        addAgentToList(AgentType.PROSPECTOR, c);
                         break;
-                    case S:
-                        map[row][col] = new StreetCell(row, col);
+                    case P:
+                        map[row][col] = new PathCell(row, col);
                         break;
-                    case R:
-                        if (recyclingCenterIndex >= recyclingCenterPrices.length) {
-                            throw new Error(getClass().getCanonicalName() + " : More recycling centers in the map than given prices");
+                    case MCC:
+                        if (manufacturingCenterIndex >= manufacturingCenterPrice.length) {
+                            throw new Error(getClass().getCanonicalName() + " : More manufacturing centers in the map than given prices");
                         }
-                        recyclingCenterPrice = recyclingCenterPrices[recyclingCenterIndex++];
-                        map[row][col] = new RecyclingCenterCell(row, col, recyclingCenterPrice);
+                        if (manufacturingCenterIndex >= manufacturingCenterMetalType.length) {
+                            throw new Error(getClass().getCanonicalName() + " : More manufacturing centers in the map than given metal types");
+                        }
+                        map[row][col] = new ManufacturingCenterCell(row, col, manufacturingCenterPrice[manufacturingCenterIndex], manufacturingCenterMetalType[manufacturingCenterIndex]);
+                        manufacturingCenterIndex++;
                         break;
-                    default: //positive value means building.
-                        // agents has to check for BuildingCell casts. 
-                        // Only SystemAgent can access to the SettableBuildingCell
-                        map[row][col] = new SettableBuildingCell(row, col);
+                    case F:
+                        // Only SystemAgent can access to the SettableFieldCell
+                        map[row][col] = new SettableFieldCell(row, col);
                         break;
+                    default:
+                        throw new Error(getClass().getCanonicalName() + " : Unexpected type of content in the 2D map");
                 }
             }
         }
-        if (recyclingCenterIndex != recyclingCenterPrices.length) {
-            throw new Error(getClass().getCanonicalName() + " : Less recycling centers in the map than given prices.");
+        if (manufacturingCenterIndex != manufacturingCenterPrice.length) {
+            throw new Error(getClass().getCanonicalName() + " : Less manufacturing centers in the map than given prices.");
         }
-        if (this.allowedGarbageTypePerHarvester.length != this.getAgentList().get(AgentType.HARVESTER).size()) {
-            throw new Error(getClass().getCanonicalName() + " : There are less harvesters than settings.");
+        if (manufacturingCenterIndex != manufacturingCenterMetalType.length) {
+            throw new Error(getClass().getCanonicalName() + " : Less manufacturing centers in the map than given metal types.");
         }
     }
-    
+
     /**
      * Ensure agent list is correctly updated.
-     * 
+     *
      * @param type agent type.
      * @param cell cell where appears the agent.
      */

@@ -21,7 +21,7 @@ package cat.urv.imas.map;
  * This class defines the kind of cells in the map.
  */
 public enum CellType implements java.io.Serializable {
-    STREET,
-    BUILDING,
-    RECYCLING_CENTER
+    PATH,
+    FIELD,
+    MANUFACTURING_CENTER
 }

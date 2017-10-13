@@ -1,5 +1,5 @@
 /**
- * IMAS base code for the practical work. 
+ * IMAS base code for the practical work.
  * Copyright (C) 2016 DEIM - URV
  *
  * This program is free software: you can redistribute it and/or modify it under
@@ -18,47 +18,40 @@
 package cat.urv.imas.onthology;
 
 /**
- * Type of garbage.
- * It provides a way of representing this type of garbage with a single letter.
+ * Type of metal.
+ * It provides a way of representing this type of metal.
  */
-public enum GarbageType {
-    GLASS {
+public enum MetalType {
+    SILVER {
+        @Override
+        public String getShortString() {
+            return "S";
+        }
+    },
+    GOLD {
         @Override
         public String getShortString() {
             return "G";
         }
-    },
-    PAPER {
-        @Override
-        public String getShortString() {
-            return "P";
-        }
-    },
-    PLASTIC {
-        @Override
-        public String getShortString() {
-            return "L";
-        }
     };
-    
+
     /**
      * Gets a letter representation of this type of garbage.
      * @return String a single letter representing the type of garbage.
      */
     public abstract String getShortString();
-    
+
     /**
-     * Gets the GarbageType according to its short string.
-     * @param String type of garbage in short string format.
-     * @return The type of of garbage.
+     * Gets the MetalType according to its short string.
+     * @param type of metal in short string format.
+     * @return The type of of metal.
      */
-    public static GarbageType fromShortString(String type) {
+    public static MetalType fromShortString(String type) {
         switch (type) {
-            case "G": return GLASS;
-            case "P": return PAPER;
-            case "L": return PLASTIC;
+            case "S": return SILVER;
+            case "G": return GOLD;
             default:
-                throw new IllegalArgumentException("Garbage type " + type + " is not supported.");
+                throw new IllegalArgumentException("Metal type '" + type + "' is not supported.");
         }
     }
 }

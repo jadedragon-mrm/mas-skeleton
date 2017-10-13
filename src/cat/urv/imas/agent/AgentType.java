@@ -21,28 +21,28 @@ package cat.urv.imas.agent;
  * Types of agents.
  */
 public enum AgentType {
-    SCOUT {
+    PROSPECTOR {
         @Override
         public String getShortString() {
-            return "SC";
+            return "P";
         }
     },
-    HARVESTER {
+    DIGGER {
         @Override
         public String getShortString() {
-            return "H";
+            return "D";
         }
     },
-    SCOUT_COORDINATOR {
+    PROSPECTOR_COORDINATOR {
         @Override
         public String getShortString() {
-            return "SCC";
+            return "PC";
         }
     },
-    HARVESTER_COORDINATOR {
+    DIGGER_COORDINATOR {
         @Override
         public String getShortString() {
-            return "HC";
+            return "DC";
         }
     },
     COORDINATOR {

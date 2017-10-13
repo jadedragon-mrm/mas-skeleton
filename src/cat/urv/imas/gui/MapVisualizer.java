@@ -34,6 +34,10 @@ public class MapVisualizer extends JPanel implements CellVisualizer {
      */
     private static final int GAP = 5;
     /**
+     * Light red color.
+     */
+    private static final Color LIGHT_RED = new Color(255, 51, 51);
+    /**
      * City map.
      */
     private final Cell[][] map;
@@ -176,32 +180,38 @@ public class MapVisualizer extends JPanel implements CellVisualizer {
     }
 
     @Override
-    public void drawScout(StreetCell cell) {
-        drawEmptyStreet(cell);
+    public void drawProspector(PathCell cell) {
+        drawEmptyPath(cell);
         drawAgent(Color.WHITE, cell.getMapMessage(), Color.BLACK);
     }
 
     @Override
-    public void drawHarvester(StreetCell cell) {
-        drawEmptyStreet(cell);
+    public void drawDigger(PathCell cell) {
+        drawEmptyPath(cell);
         drawAgent(Color.RED, cell.getMapMessage(), Color.BLACK);
     }
 
     @Override
-    public void drawEmptyStreet(StreetCell cell) {
+    public void drawEmptyPath(PathCell cell) {
         drawCell(Color.LIGHT_GRAY, Color.DARK_GRAY);
     }
 
     @Override
-    public void drawBuilding(BuildingCell cell) {
+    public void drawField(FieldCell cell) {
         drawCell(Color.CYAN.darker(), Color.DARK_GRAY);
         drawString(cell.getMapMessage(), Color.WHITE, dx - 40, dy);
     }
 
     @Override
-    public void drawRecyclingCenter(RecyclingCenterCell cell) {
+    public void drawManufacturingCenter(ManufacturingCenterCell cell) {
         drawCell(Color.RED, Color.GREEN);
         drawString(cell.getMapMessage(), Color.BLACK, dx - 80, dy);
+    }
+
+    @Override
+    public void drawAgents(PathCell cell) {
+        drawEmptyPath(cell);
+        drawAgent(LIGHT_RED, cell.getMapMessage(), Color.BLACK);
     }
 
 }
