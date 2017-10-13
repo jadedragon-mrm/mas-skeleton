@@ -13,10 +13,10 @@ the main cooperation mechanism.
 
 # Scenario
 
-This exercise aims to simulate an efficient cleaning of a city. There are two
-kinds of entities: (i) scouts, that detects where the garbage is, and (ii)
-harvesters that are responsible for harvesting the garbage and disposing it
-into recycling centers.
+This exercise aims to simulate an efficient manufacturing of metals
+on a countryside. There are two kinds of entities: (i) prospectors,
+that detects where the metal is, and (ii) diggers that are responsible
+digging metal up and disposing it on manufacturing centers.
 
 To make it easy, the game will run in simulation steps. All necessary
 communication is expected to be performed in every single simulation step
@@ -37,7 +37,7 @@ You can build your running scripts starting with those profiles.
 # Authors
 
 * Other teachers build the first skeleton.
-* Based on that, the current version was revisited by: 
+* Based on that, the current version was revisited by:
  * Jordi Pujol Ahulló <jordi.pujol@urv.cat>, Universitat Rovira i Virgili.
 
 
@@ -47,7 +47,7 @@ This work is distributed under [GPL license](http://www.gnu.org/copyleft/gpl.htm
 
 ```
     IMAS base code for the practical work.
-    Copyright (C) 2016 DEIM - URV
+    Copyright (C) 2017 DEIM - URV
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
