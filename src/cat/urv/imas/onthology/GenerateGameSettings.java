@@ -34,7 +34,12 @@ public class GenerateGameSettings {
      * @param settings GameSettings instance.
      */
     public static void defineSettings(InitialGameSettings settings) {
-        settings.setSeed(1234567.8f);
+        //add here whatever settings.set* to define your new settings.
+        settings.setSeed(1234567890);
+        settings.setNewMetalProbability(40);
+        settings.setMaxNumberFieldsWithNewMetal(3);
+        settings.setMaxAmountOfNewMetal(6);
+        settings.setDiggersCapacity(6);
         settings.setManufacturingCenterPrice(new int[]{8, 9, 6, 7});
         settings.setManufacturingCenterMetalType(new MetalType[]{
             MetalType.GOLD,
@@ -44,7 +49,8 @@ public class GenerateGameSettings {
         });
         settings.setSimulationSteps(STEPS);
         settings.setTitle("Practical IMAS");
-        //add here whatever settings.set* to define your new settings.
+        settings.setNumberInitialElements(10);
+        settings.setNumberVisibleInitialElements(10);
         // settings for first date
         int[][] map
             = {
@@ -69,7 +75,6 @@ public class GenerateGameSettings {
                 {F, P, P, P, P, P, P, F, F, P, P, P, P, P, P, F, F, DC, P, F},
                 {F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F},
             };
-        settings.setDiggersCapacity(6);
         settings.setInitialMap(map);
     }
 
@@ -137,11 +142,11 @@ public class GenerateGameSettings {
         try {
             GameSettings settings = InitialGameSettings.load(FILENAME);
             if (settings.getSimulationSteps() != STEPS) {
-                throw new Exception("Something went wrong, we loaded some different to what we stored.");
+                throw new Exception("Something went wrong, we loaded some different to what we stored on '" + FILENAME + "'.");
             }
-            System.out.println("Settings loaded again. Ok!");
+            System.out.println("Settings loaded again from '" + FILENAME + "'. Ok!");
         } catch (Exception e) {
-            System.err.println("Settings could not be loaded!");
+            System.err.println("Settings could not be loaded from '" + FILENAME + "'!");
             e.printStackTrace();
         }
     }

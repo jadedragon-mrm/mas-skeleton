@@ -1,5 +1,5 @@
 /**
- * IMAS base code for the practical work. 
+ * IMAS base code for the practical work.
  * Copyright (C) 2016 DEIM - URV
  *
  * This program is free software: you can redistribute it and/or modify it under
@@ -25,15 +25,21 @@ import cat.urv.imas.onthology.MetalType;
  FieldCell is the API provided to agents.
  */
 public class SettableFieldCell extends FieldCell {
-    
+
     public SettableFieldCell(int row, int col) {
         super(row, col);
     }
-    
-    public void setGarbage(MetalType type, int amount) {
+
+    public void setElements(MetalType type, int amount) {
         if (!metal.isEmpty()) {
-            throw new IllegalStateException("This building (" + this.getRow() + "," + this.getCol() + ") has garbage yet: " + this.getMapMessage());
+            throw new IllegalStateException("This cell (" + this.getRow() + "," + this.getCol() + ") has already elements: " + this.getMapMessage());
         }
         metal.put(type, amount);
     }
+
+    @Override
+    public boolean isEmpty() {
+        return metal.isEmpty();
+    }
+
 }

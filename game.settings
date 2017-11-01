@@ -9,10 +9,10 @@
     <manufacturingCenterPrice>9</manufacturingCenterPrice>
     <manufacturingCenterPrice>6</manufacturingCenterPrice>
     <manufacturingCenterPrice>7</manufacturingCenterPrice>
-    <maxAmountOfNewMetal>5</maxAmountOfNewMetal>
-    <maxNumberFieldsWithNewMetal>5</maxNumberFieldsWithNewMetal>
-    <newMetalProbability>10</newMetalProbability>
-    <seed>1234567.8</seed>
+    <maxAmountOfNewMetal>6</maxAmountOfNewMetal>
+    <maxNumberFieldsWithNewMetal>3</maxNumberFieldsWithNewMetal>
+    <newMetalProbability>40</newMetalProbability>
+    <seed>1234567890</seed>
     <simulationSteps>600</simulationSteps>
     <title>Practical IMAS</title>
     <initialMap>
@@ -455,5 +455,7 @@
         <item>-4</item>
         <item>-4</item>
     </initialMap>
+    <numberInitialElements>10</numberInitialElements>
+    <numberVisibleInitialElements>10</numberVisibleInitialElements>
 </InitialGameSettings>
 
