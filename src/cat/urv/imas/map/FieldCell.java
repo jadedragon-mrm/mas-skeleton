@@ -73,6 +73,12 @@ public class FieldCell extends Cell {
         return (found) ? metal : empty;
     }
 
+    @Override
+    public boolean isEmpty() {
+        return found;
+    }
+
+
     /**
      * Removes an item of the current metal, if any.
      * When there is no more metal after removing it, the set of

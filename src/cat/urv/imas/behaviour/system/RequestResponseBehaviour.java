@@ -50,7 +50,7 @@ public class RequestResponseBehaviour extends AchieveREResponder {
     /**
      * When System Agent receives a REQUEST message, it agrees. Only if
      * message type is AGREE, method prepareResultNotification() will be invoked.
-     * 
+     *
      * @param msg message received.
      * @return AGREE message when all was ok, or FAILURE otherwise.
      */
@@ -76,10 +76,10 @@ public class RequestResponseBehaviour extends AchieveREResponder {
     /**
      * After sending an AGREE message on prepareResponse(), this behaviour
      * sends an INFORM message with the whole game settings.
-     * 
+     *
      * NOTE: This method is called after the response has been sent and only when one
      * of the following two cases arise: the response was an agree message OR no
-     * response message was sent. 
+     * response message was sent.
      *
      * @param msg ACLMessage the received message
      * @param response ACLMessage the previously sent response message
@@ -96,6 +96,7 @@ public class RequestResponseBehaviour extends AchieveREResponder {
         reply.setPerformative(ACLMessage.INFORM);
 
         try {
+            agent.addElementsForThisSimulationStep();
             reply.setContentObject(agent.getGame());
         } catch (Exception e) {
             reply.setPerformative(ACLMessage.FAILURE);

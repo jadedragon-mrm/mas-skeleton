@@ -22,7 +22,12 @@ import cat.urv.imas.map.*;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
+import java.util.TreeSet;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlElement;
@@ -86,6 +91,38 @@ public class InitialGameSettings extends GameSettings {
                 {F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F},
             };
 
+    /**
+     * Number of initial elements to put in the map.
+     */
+    private int numberInitialElements = 0;
+    /**
+     * Number of those initial elements which will be visible from
+     * the very beginning. At maximum, this value will be numberInitialElements.
+     * @see numberInitialElements
+     */
+    private int numberVisibleInitialElements = 0;
+    /**
+     * Random number generator.
+     */
+    private Random numberGenerator;
+
+    @XmlElement(required = true)
+    public void setNumberInitialElements(int initial) {
+        numberInitialElements = initial;
+    }
+
+    public int getNumberInitialElements() {
+        return numberInitialElements;
+    }
+
+    @XmlElement(required = true)
+    public void setNumberVisibleInitialElements(int initial) {
+        numberVisibleInitialElements = initial;
+    }
+
+    public int getNumberVisibleInitialElements() {
+        return numberVisibleInitialElements;
+    }
 
     public int[][] getInitialMap() {
         return initialMap;
@@ -96,7 +133,7 @@ public class InitialGameSettings extends GameSettings {
         this.initialMap = initialMap;
     }
 
-    public static final GameSettings load(String filename) {
+    public static final InitialGameSettings load(String filename) {
         if (filename == null) {
             filename = "game.settings";
         }
@@ -108,7 +145,7 @@ public class InitialGameSettings extends GameSettings {
             starter.initMap();
             return starter;
         } catch (Exception e) {
-            System.err.println(filename);
+            System.err.println("Loading of settings from file '" + filename + "' failed!");
             System.exit(-1);
         }
         return null;
@@ -124,9 +161,12 @@ public class InitialGameSettings extends GameSettings {
         map = new Cell[rows][cols];
         int manufacturingCenterIndex = 0;
         this.agentList = new HashMap();
+        numberGenerator = new Random(this.getSeed());
 
         int cell;
         PathCell c;
+        Map<CellType, List<Cell>> cells = new HashMap();
+
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
                 cell = initialMap[row][col];
@@ -163,14 +203,153 @@ public class InitialGameSettings extends GameSettings {
                     default:
                         throw new Error(getClass().getCanonicalName() + " : Unexpected type of content in the 2D map");
                 }
+                CellType type = map[row][col].getCellType();
+                List<Cell> list;
+                if (cells.containsKey(type)) {
+                    list = cells.get(type);
+                } else {
+                    list = new LinkedList();
+                    cells.put(type, list);
+                }
+                list.add(map[row][col]);
             }
         }
+
+        this.setCellsOfType(cells);
+
         if (manufacturingCenterIndex != manufacturingCenterPrice.length) {
             throw new Error(getClass().getCanonicalName() + " : Less manufacturing centers in the map than given prices.");
         }
         if (manufacturingCenterIndex != manufacturingCenterMetalType.length) {
             throw new Error(getClass().getCanonicalName() + " : Less manufacturing centers in the map than given metal types.");
         }
+        if (0 > this.getNumberInitialElements()) {
+            throw new Error(getClass().getCanonicalName() + " : Not allowed negative number of elements.");
+        }
+        int availableCells = getNumberOfCellsOfType(CellType.FIELD);
+        if (availableCells < this.getNumberInitialElements()) {
+            throw new Error(getClass().getCanonicalName() + " : You set up more new initial elements ("+ this.getNumberInitialElements() +")than existing cells ("+ availableCells +").");
+        }
+        if (0 > this.getNumberVisibleInitialElements()) {
+            throw new Error(getClass().getCanonicalName() + " : Not allowed negative number of visible elements.");
+        }
+        if (this.getNumberVisibleInitialElements() > this.getNumberInitialElements()) {
+            throw new Error(getClass().getCanonicalName() + " : More visible elements than initial elements.");
+        }
+
+        int maxInitial = this.getNumberInitialElements();
+        int maxVisible = this.getNumberVisibleInitialElements();
+
+        addElements(maxInitial, maxVisible);
+    }
+
+
+    public void addElements(int maxElements, int maxVisible) {
+        CellType ctype = CellType.FIELD;
+        int maxCells = getNumberOfCellsOfType(ctype);
+        int freeCells = this.getNumberOfCellsOfType(ctype, true);
+
+        if (maxElements < 0) {
+            throw new Error(getClass().getCanonicalName() + " : Not allowed negative number of elements.");
+        }
+        if (maxElements > freeCells) {
+            throw new Error(getClass().getCanonicalName() + " : Not allowed add more elements than empty cells.");
+        }
+        if (maxVisible < 0) {
+            throw new Error(getClass().getCanonicalName() + " : Not allowed negative number of visible elements.");
+        }
+        if (maxVisible > maxElements) {
+            throw new Error(getClass().getCanonicalName() + " : More visible elements than number of elements.");
+        }
+
+        System.out.println(getClass().getCanonicalName() + " : Adding " + maxElements +
+                " elements (" + maxVisible + " of them visible) on a map with " +
+                maxCells + " cells (" + freeCells + " of them candidate).");
+
+        if (0 == maxElements) {
+            return;
+        }
+
+        Set<Integer> initialSet = new TreeSet();
+        int index;
+        while (initialSet.size() < maxElements) {
+            index = numberGenerator.nextInt(maxCells);
+            if (isEmpty(index)) {
+                initialSet.add(index);
+            }
+        }
+
+        Set<Integer> visibleSet = new TreeSet();
+        Object[] initialCells = initialSet.toArray();
+        while (visibleSet.size() < maxVisible) {
+            visibleSet.add((Integer)initialCells[numberGenerator.nextInt(maxElements)]);
+        }
+
+        MetalType[] types = MetalType.values();
+        MetalType type;
+        int amount;
+        boolean visible;
+        for (int i: initialSet) {
+            type = types[numberGenerator.nextInt(types.length)];
+            amount = numberGenerator.nextInt(this.getMaxAmountOfNewMetal()) + 1;
+            visible = visibleSet.contains(i);
+            setElements(type, amount, visible, i);
+        }
+    }
+
+    /**
+     * Tells whether the given cell is empty of elements.
+     * @param ncell nuber of cell.
+     * @return true when empty.
+     */
+    private boolean isEmpty(int ncell) {
+        return ((SettableFieldCell)cellsOfType.get(CellType.FIELD).get(ncell)).isEmpty();
+    }
+
+    /**
+     * Set up the amount of elements of the given type on the cell specified by
+     * ncell. It will be visible whenever stated.
+     * @param type type of elements to put in the map.
+     * @param amount amount of elements to put into.
+     * @param ncell number of cell from a given list.
+     * @param visible visible to agents?
+     */
+    private void setElements(MetalType type, int amount, boolean visible, int ncell) {
+        SettableFieldCell cell = (SettableFieldCell)cellsOfType.get(CellType.FIELD).get(ncell);
+        cell.setElements(type, amount);
+        if (visible) {
+            cell.detectMetal();
+        }
+    }
+
+    /**
+     * Process the request of adding new elements onto the map to be run
+     * every simulation step.
+     *
+     * Mainly, it checks the probability of having new elements. If so,
+     * it finds the number of cells with new elements, to finally add
+     * new elements to the given number of cells.
+     *
+     * This process also checks that if there is room for the given number of
+     * cells. Otherwise and error is thrown.
+     */
+    public void addElementsForThisSimulationStep() {
+        int probabilityOfNewElements = this.getNewMetalProbability();
+        int stepProbability = numberGenerator.nextInt(100) +1;
+
+        if (stepProbability < probabilityOfNewElements) {
+            System.out.println(getClass().getCanonicalName() + " : " + stepProbability +
+                    " < " + probabilityOfNewElements +
+                    " (step probability for new elements < probability of new elements)");
+            return;
+        }
+
+        int maxCells = this.getMaxNumberFieldsWithNewMetal();
+        int numberCells = numberGenerator.nextInt(maxCells) + 1;
+
+        // add elements to the given number of cells for this simulation step.
+        // all of them hidden.
+        addElements(numberCells, 0);
     }
 
     /**

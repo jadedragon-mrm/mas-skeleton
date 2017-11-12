@@ -41,6 +41,12 @@ public class PathCell extends Cell {
         super(CellType.PATH, row, col);
     }
 
+    @Override
+    public boolean isEmpty() {
+        return agents.isEmpty();
+    }
+
+
     /* ********************************************************************** */
     /**
      * Checks whether this cell contains a digger agent digging up some metal.

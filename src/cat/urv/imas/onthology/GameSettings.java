@@ -19,6 +19,7 @@ package cat.urv.imas.onthology;
 
 import cat.urv.imas.agent.AgentType;
 import cat.urv.imas.map.Cell;
+import cat.urv.imas.map.CellType;
 import java.util.List;
 import java.util.Map;
 import javax.xml.bind.annotation.XmlElement;
@@ -39,7 +40,7 @@ public class GameSettings implements java.io.Serializable {
     /**
      * Seed for random numbers.
      */
-    private float seed = 0.0f;
+    private long seed = 0;
     /**
      * Metal price for each manufacturing center. They appear inthe same order
      * than they appear in the map.
@@ -92,14 +93,18 @@ public class GameSettings implements java.io.Serializable {
      * Title to set to the GUI.
      */
     protected String title = "Default game settings";
+    /**
+     * List of cells per type of cell.
+     */
+    protected Map<CellType, List<Cell>> cellsOfType;
 
 
-    public float getSeed() {
+    public long getSeed() {
         return seed;
     }
 
     @XmlElement(required = true)
-    public void setSeed(float seed) {
+    public void setSeed(long seed) {
         this.seed = seed;
     }
 
@@ -218,6 +223,29 @@ public class GameSettings implements java.io.Serializable {
     public String getShortString() {
         //TODO: list of agents
         return "Game settings: agent related string";
+    }
+
+    @XmlTransient
+    public Map<CellType, List<Cell>> getCellsOfType() {
+        return cellsOfType;
+    }
+
+    public void setCellsOfType(Map<CellType, List<Cell>> cells) {
+        cellsOfType = cells;
+    }
+
+    public int getNumberOfCellsOfType(CellType type) {
+        return cellsOfType.get(type).size();
+    }
+
+    public int getNumberOfCellsOfType(CellType type, boolean empty) {
+        int max = 0;
+        for(Cell cell : cellsOfType.get(type)) {
+            if (cell.isEmpty()) {
+                max++;
+            }
+        }
+        return max;
     }
 
 }

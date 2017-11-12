@@ -48,6 +48,11 @@ public class ManufacturingCenterCell extends Cell {
         this.metal = type;
     }
 
+    @Override
+    public boolean isEmpty() {
+        return false;
+    }
+
     /* ***************** Map visualization API ********************************/
     @Override
     public void draw(CellVisualizer visual) {
